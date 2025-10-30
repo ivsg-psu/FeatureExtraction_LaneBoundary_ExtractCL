@@ -1,58 +1,94 @@
-function [pointCloud_ST_cell, ref_station] = fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_cell, Ref_Pose, varargin)
-% fcn_ExtractCL_projectPointCloud2ST
-% Projects ENU LiDAR point clouds into (s, t) space with respect to a given reference trajectory.
+function [pointCloud_ST_cell, ref_station, Seg] = fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_cell, Ref_Pose, varargin)
+% fcn_ExtractCL_projectPC_ENUToST
+% Projects ENU LiDAR point clouds into the curvilinear (s, t) frame with
+% respect to a given reference trajectory. Each LiDAR point is associated
+% to its closest reference-segment, producing longitudinal station s and
+% lateral offset t for downstream lane-centerline extraction and mapping.
 %
 % FORMAT:
-%   [pointCloud_ST_cell, ref_station] = fcn_ExtractCL_projectPointCloud2ST(...
-%       PointCloud_ENU_cell, Ref_Pose, (fig_num))
+%
+%      [pointCloud_ST_cell, ref_station, Seg] = ...
+%      fcn_ExtractCL_projectPC_ENUToST(...
+%           PointCloud_ENU_cell,...
+%           Ref_Pose,...
+%           (fig_num_or_minus1));
 %
 % INPUTS:
-%   PointCloud_ENU_cell: Nx1 cell array
-%     Each cell contains a LiDAR scan in ENU coordinates, formatted as [X Y Z Intensity TimeOffset Ring ...].
 %
-%   Ref_Pose: Mx7 array
-%     Reference trajectory, with each row as [X, Y, Z, ..., Yaw, Station].
-%     Only [X, Y, Z, Yaw] are used in this function.
+%      PointCloud_ENU_cell: Lx1 cell array
+%          Each cell contains a LiDAR scan in ENU coordinates, formatted as:
+%          [X Y Z Intensity (TimeOffset) (Ring) ...]. Only XYZI are required.
 %
-%   (OPTIONAL) fig_num: scalar
-%     If -1, disables debugging and input checking.
+%      Ref_Pose: MxK numeric array (K >= 3 recommended)
+%          Reference trajectory with rows like [X Y Z Roll Pitch Yaw].
+%          Only [X, Y, Z, Yaw] are needed by downstream helpers.
+%
+%      (OPTIONAL) fig_num_or_minus1: scalar
+%          If -1, disables debugging and input checking (max-speed mode).
+%          Otherwise treated as a figure number for plotting (debug view).
 %
 % OUTPUTS:
-%   pointCloud_ST_cell: Lx1 cell
-%     Each cell contains an array of Mx1 cells, one per frame, where each frame is a Nx10 array:
-%     [X, Y, Z, ..., s, t]
 %
-%   ref_station: Mx1 vector
-%     Cumulative arc-length station values along the reference trajectory.
+%      pointCloud_ST_cell: Lx1 cell
+%          Per-frame arrays with appended (s, t) columns:
+%          [X, Y, Z, Intensity, ..., s, t].
+%
+%      ref_station: Mx1 vector
+%          Cumulative station (arc length) along the reference trajectory.
+%
+%      Seg: struct
+%          Precomputed segment cache returned by
+%          fcn_ExtractCL_buildSegmentsFromRefPose (segment tree, tangents,
+%          normals, segment starts/ends, etc.).
 %
 % DEPENDENCIES:
-%   Requires Statistics and Machine Learning Toolbox (KDTreeSearcher).
 %
-% Author:
-%   Xinyu Cao, 2025-06-23
+%      fcn_ExtractCL_buildSegmentsFromRefPose    % segment cache builder
+%      Statistics and Machine Learning Toolbox   % knnsearch / KDTree
+%
+% EXAMPLES:
+%
+%      See script: script_test_fcn_ExtractCL_projectPC_ENUToST
+%
+% This function was written on 2025_06_23 by X. Cao
+% Questions or comments? xinyucao@psu.edu
+%
+% Revision history:
+%
+%      2025_08_15 - xfc5113@psu.edu
+%      -- added fcn_ExtractCL_buildSegmentsFromRefPose
+%      2025_10_28 - xfc5113@psu.edu
+%      -- aligned headings/comments to project template
+%      -- added strict input checks and debug/plot gating
+%
+% TO DO
+%      - Add optional robust fallbacks if knnsearch is unavailable
 
-%% Debugging and Input checks
+%% Debug and input-check flags
 flag_max_speed = 0;
-if nargin == 4 && isequal(varargin{end}, -1)
+if nargin >= 3 && isequal(varargin{end}, -1)
     flag_do_debug = 0;
     flag_check_inputs = 0;
     flag_max_speed = 1;
+    fig_num = -1;
 else
+    % Defaults
     flag_do_debug = 0;
     flag_check_inputs = 1;
-    MATLABFLAG_CL_FLAG_DO_DEBUG = getenv("MATLABFLAG_CL_FLAG_DO_DEBUG");
-    MATLABFLAG_CL_FLAG_CHECK_INPUTS = getenv("MATLABFLAG_CL_FLAG_CHECK_INPUTS");
-    if ~isempty(MATLABFLAG_CL_FLAG_DO_DEBUG)
-        flag_do_debug = str2double(MATLABFLAG_CL_FLAG_DO_DEBUG);
-    end
-    if ~isempty(MATLABFLAG_CL_FLAG_CHECK_INPUTS)
-        flag_check_inputs = str2double(MATLABFLAG_CL_FLAG_CHECK_INPUTS);
+    fig_num = -1;
+    % Environment gating (optional)
+    t1 = getenv("MATLABFLAG_CL_FLAG_DO_DEBUG");        if ~isempty(t1), flag_do_debug    = str2double(t1); end
+    t2 = getenv("MATLABFLAG_CL_FLAG_CHECK_INPUTS");    if ~isempty(t2), flag_check_inputs = str2double(t2); end
+    % If a normal figure number was provided
+    if ~isempty(varargin)
+        fig_num = varargin{1};
     end
 end
+flag_do_plot = isnumeric(fig_num) && isscalar(fig_num) && isfinite(fig_num) && (fig_num > 1);
 
+% Tell user where we are
 if flag_do_debug
-    st = dbstack;
-    fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
+    st = dbstack; fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
 end
 
 %% check input arguments
@@ -67,20 +103,40 @@ end
 %              |_|
 % See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% Input check
 if flag_check_inputs
-    assert(iscell(PointCloud_ENU_cell), 'PointCloud_ENU_cell must be a cell array');
-    assert(isnumeric(Ref_Pose) && size(Ref_Pose,2) >= 6, 'Ref_Pose must be Mx6 or Mx7');
+    % Basic type/shape checks
+    if ~iscell(PointCloud_ENU_cell) || isempty(PointCloud_ENU_cell)
+        error('fcn_ExtractCL_projectPC_ENUToST:BadPointCloudCell',...
+              'PointCloud_ENU_cell must be a non-empty cell array of frames.');
+    end
+    if ~(isnumeric(Ref_Pose) && ismatrix(Ref_Pose) && ~isempty(Ref_Pose))
+        error('fcn_ExtractCL_projectPC_ENUToST:BadRefPose',...
+              'Ref_Pose must be a non-empty numeric 2-D array (MxK).');
+    end
+    if size(Ref_Pose,2) < 4
+        error('fcn_ExtractCL_projectPC_ENUToST:RefPoseTooFewCols',...
+              'Ref_Pose must have at least 4 columns (X Y Z Yaw ...).');
+    end
+
+    % Per-frame checks (only light checks to keep runtime low)
+    for iFrame = 1:numel(PointCloud_ENU_cell)
+        frameArr = PointCloud_ENU_cell{iFrame};
+        if isempty(frameArr)
+            continue; 
+        end
+        if ~(isnumeric(frameArr) && ismatrix(frameArr) && size(frameArr,2) >= 4)
+            error('fcn_ExtractCL_projectPC_ENUToST:BadFrameFormat',...
+                  'Each frame must be numeric Nx4+ with [X Y Z Intensity ...].');
+        end
+    end
+
+    % Toolbox / function availability
+    if exist('knnsearch','file') ~= 2
+        error('fcn_ExtractCL_projectPC_ENUToST:MissingKNN',...
+              'knnsearch not found. Statistics and Machine Learning Toolbox is required.');
+    end
 end
-fig_num = -1;
-if nargin >= 3
-    fig_num = varargin{1};
-end
-flag_do_plot = 0;
-if fig_num > 1
-    flag_do_plot = 1;
-end
+
 %% Main code starts here
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   __  __       _
@@ -92,20 +148,37 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-traj_XY = Ref_Pose(:,1:2);
-yaw_array = Ref_Pose(:,6);
-ds = sqrt(sum(diff(traj_XY).^2, 2));
-base_ref_station = [0; cumsum(ds)];
-ref_tree = KDTreeSearcher(traj_XY);
-S_offset = 0;
+% Build/reference segment cache from the reference pose
+Seg = fcn_ExtractCL_buildSegmentsFromRefPose(Ref_Pose, varargin{:});
+ref_station          = Seg.ref_station;
+traj_start           = Seg.traj_start;
+traj_end             = Seg.traj_end;
+segment_length       = Seg.segment_length;
+seg_tangent          = Seg.seg_tangent;
+seg_normal           = Seg.seg_normal;
+seg_start_station    = Seg.seg_start_station;
+d_seg                = Seg.d_seg;
+seg_tree             = Seg.seg_tree;
+
+% Quick guard for empty/degenerate path
+if isempty(ref_station) || ref_station(end) <= 0
+    pointCloud_ST_cell = cell(size(PointCloud_ENU_cell));
+    if flag_do_debug, fprintf(1,'Empty/degenerate station profile. Returning empties.\n'); end
+    return
+end
+
+% Parameters
+Kcand = 5;                                   % number of candidate segments to evaluate per point
 N_LiDAR_frames = length(PointCloud_ENU_cell);
-ref_station = base_ref_station + S_offset;
-s_total_length = max(ref_station);
+s_total_length = ref_station(end);
 pointCloud_ST_cell = cell(N_LiDAR_frames,1);
 
-all_s = [];
-all_t = [];
-all_intensity = [];
+% Optional debug-plot accumulators
+if flag_do_plot
+    all_s = []; all_t = []; all_intensity = [];
+end
+
+% Per-frame projection
 for ith_frame = 1:N_LiDAR_frames
     PointCloud_ENU_array = PointCloud_ENU_cell{ith_frame};
     if isempty(PointCloud_ENU_array)
@@ -113,39 +186,60 @@ for ith_frame = 1:N_LiDAR_frames
         continue;
     end
 
-    points_xyz = PointCloud_ENU_array(:,1:3);
-    points_xy = points_xyz(:,1:2);
-    points_intensity = PointCloud_ENU_array(:,4);
-    idx_nearest = knnsearch(ref_tree, points_xy);
-    % ref_pose_index = mode(idx_nearest);
+    points_xyz        = PointCloud_ENU_array(:,1:3);
+    points_xy         = points_xyz(:,1:2);
+    points_intensity  = PointCloud_ENU_array(:,4);
 
-    ref_xy = traj_XY(idx_nearest,:);
-    ref_yaw = yaw_array(idx_nearest);
-    ref_station_point = ref_station(idx_nearest);
+    % Candidate segment indices per point
+    idx_nearest = knnsearch(seg_tree, points_xy,'K',Kcand);
 
-    relative_x = points_xy(:,1) - ref_xy(:,1);
-    relative_y = points_xy(:,2) - ref_xy(:,2);
+    % Preallocate best results
+    Npts            = size(points_xy,1);
+    best_dist2      = inf(Npts,1);
+    best_station    = zeros(Npts,1);
+    best_T          = zeros(Npts,1);
 
-    s_array = ref_station_point + relative_x .* cos(ref_yaw) + relative_y .* sin(ref_yaw);
-    t_array = -relative_x .* sin(ref_yaw) + relative_y .* cos(ref_yaw);
-    
- 
-    
-    % station_index_array = ref_pose_index * ones(size(s_array,1),1);
+    % Evaluate each candidate segment
+    for ith_candidate = 1:Kcand
+        candidate_indices        = idx_nearest(:,ith_candidate);
 
-    pointCloud_St_array = [PointCloud_ENU_array, s_array, t_array];
-    pointCloud_ST_cell{ith_frame} = pointCloud_St_array;
+        seg_start_candidate      = traj_start(candidate_indices,:);        % [Nx2]
+        seg_end_candidate        = traj_end(candidate_indices,:);          % [Nx2]
+        seg_tangent_candidate    = seg_tangent(candidate_indices,:);       % [Nx2] unit
+        seg_normal_candidate     = seg_normal(candidate_indices,:);        % [Nx2] unit
+        segment_length_candidate = segment_length(candidate_indices);       % [Nx1]
+        segment_start_candidate  = seg_start_station(candidate_indices);    % [Nx1]
+        d_seg_candidate          = d_seg(candidate_indices);                % [Nx1]
 
-    if flag_do_plot
-      
-        all_s = [all_s; mod(s_array,s_total_length)];
-        all_t = [all_t; t_array];
-        all_intensity = [all_intensity; points_intensity];
+        % Normalized projection factor along the segment, clipped to [0,1]
+        denom = max(segment_length_candidate, eps);
+        alpha = sum((points_xy - seg_start_candidate).*seg_tangent_candidate,2)./denom;
+        alpha = max(0, min(1, alpha));
+
+        % Closest point on segment and residual
+        points_proj_on_seg = seg_start_candidate + alpha.*(seg_end_candidate - seg_start_candidate);
+        relative_offsets   = points_xy - points_proj_on_seg;
+        dist2              = sum(relative_offsets.^2,2);
+
+        % Keep closest candidate
+        tf_is_closer                   = dist2 < best_dist2;
+        best_dist2(tf_is_closer)       = dist2(tf_is_closer);
+        best_station(tf_is_closer)     = segment_start_candidate(tf_is_closer) + alpha(tf_is_closer).*d_seg_candidate(tf_is_closer);
+        best_T(tf_is_closer)           = sum(seg_normal_candidate(tf_is_closer,:).*relative_offsets(tf_is_closer,:),2);
     end
 
-end
-% S_offset = S_offset + ref_station(end); % Optional if cumulative stationing is needed
+    % Assemble per-frame output: append s, t
+    s_array = best_station;
+    t_array = best_T;
+    pointCloud_ST_cell{ith_frame} = [PointCloud_ENU_array, s_array, t_array];
 
+    % Aggregate for debug plotting
+    if flag_do_plot
+        all_s         = [all_s; mod(s_array, s_total_length)]; %#ok<AGROW>
+        all_t         = [all_t; t_array];                      %#ok<AGROW>
+        all_intensity = [all_intensity; points_intensity];     %#ok<AGROW>
+    end
+end
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -158,20 +252,18 @@ end
 %                            __/ |
 %                           |___/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if flag_do_plot
+    figure(fig_num); clf;
+    scatter(all_s, all_t, 16, all_intensity, 'filled');
+    axis equal; grid on;
+    xlabel('s [m]');
+    ylabel('t [m]');
+    title('LiDAR point cloud projected into (s, t) frame');
+    cb = colorbar; %#ok<NASGU>
+end
 
 if flag_do_debug
     fprintf(1,'ENDING function: %s\n', st(1).name);
 end
 
-if flag_do_plot
-    figure(fig_num); 
-    clf;
-    scatter(all_s, all_t, 20, all_intensity);
-    axis equal;
-    grid on;
-    xlabel('S [m]');
-    ylabel('T [m]');
-    title('LiDAR point cloud projected into ST frame');
-end
-
-end
+end % Ends main function

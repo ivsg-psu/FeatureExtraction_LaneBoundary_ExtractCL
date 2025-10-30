@@ -9,7 +9,7 @@
 % repurposed to demonstrate feature extraction instead of lap detection.
 %
 % Typical repo location:
-%   https://github.com/ivsg-psu/FeatureExtraction_LaneDetection_ExtremaPattern
+%   https://github.com/ivsg-psu/FeatureExtraction_LaneBoundary_ExtractCL
 %
 % Contact: Xinyu Cao or Dr. Sean Brennan at sbrennan@psu.edu
 
@@ -18,6 +18,14 @@
 % -- Created based on Laps demo structure
 % -- Replaced lap segmentation with LiDAR-based center line extraction demo
 % -- Added dependencies for LaneDetection
+% 2025_10_30 - Xinyu Cao
+% -- Added a function that packages Steps 1–5 to directly output the final results.
+
+% TO DO:
+
+%% Prepare the workspace
+clear all
+close all
 
 clear library_name library_folders library_url
 
@@ -96,63 +104,155 @@ setenv('MATLABFLAG_EXTRACTCL_FLAG_DO_DEBUG','0');
 
 disp('Welcome to the demo code for the ExtractCL library!')
 
-%% Load raw data
+%% Step 0: Load raw data
 % The raw LiDAR point cloud and vehicle pose data are loaded here.
-disp('Step 1: Loading raw LiDAR and vehicle pose data...')
-% --> Replace this with your actual data loading code
-% Example:
-load('Data/VehiclePoseExample.mat','VehiclePose_Example');
-load('Data/PointCloudENUExample.mat','PointCloud_ENU_Example');
+disp('Step 0: Loading raw LiDAR and vehicle pose data...')
 
+flag_do_curve = 1;
+if flag_do_curve
+    % Load default dataset (straight)
+    [VehiclePose_Example, PointCloud_ENU_Example] = fcn_ExtractCL_loadMatData('Data','VehiclePoseExample.mat','PointCloudENUExample_Curve.mat');
+else
+    % Load example dataset (curve) 
+    [VehiclePose_Example, PointCloud_ENU_Example] = fcn_ExtractCL_loadMatData();
+end
+ %
+ 
 
-%% Project pointcloud data from ENU to ST coordinates
-disp('Step 2: Projecting LiDAR point cloud to station-lateral (S,T) frame...')
-% --> Optional, if laps are available or needed
+%% View point cloud data in ENU, only view some examples
+N_frames = length(PointCloud_ENU_Example);
+fig_num = 1;
+plotFormat.Color = [1 0 0];
+plotFormat.Marker = '.';
+plotFormat.MarkerSize = 10;
+plotFormat.LineStyle = '-';
+plotFormat.LineWidth = 3;
+frames_to_view = 1:round(N_frames/2);
+PointCloud_ENU_toBeView = PointCloud_ENU_Example(frames_to_view);
+PointCloud_ENU_toBeView_Array = cell2mat(PointCloud_ENU_toBeView);
+fcn_ExtractCL_plotCenterLineXY(VehiclePose_Example, PointCloud_ENU_toBeView_Array, plotFormat, fig_num)
+title('LiDAR pointcloud vs reference trajectory in ENU')
 
-fig_num = 123;
-[pointCloud_ST_cell, ref_station] = fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_Example, VehiclePose_Example, fig_num);
-
-%% Extract center line using extrema and pattern matching
+%% Step 1: Project pointcloud data from ENU to ST coordinates
+disp('Step 1: Projecting LiDAR point cloud to station-lateral (S,T) frame...') 
+[pointCloud_ST_cell, ref_station, Seg] = ...
+    fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_Example, VehiclePose_Example, fig_num); %#ok<ASGLU>
+%% Step 2: Filter the processing region in the lateral direction to reduce the amount of data to be processed.
+disp('Step 2: Filtering the processing region in the lateral direction to reduce the amount of data to be processed....') 
+T_range = [-3, 3];
+pointCloud_ST_filtered_cell = fcn_ExtractCL_filterPCinT(pointCloud_ST_cell, T_range);
+%% Compare pointcloud in ENU and ST coordinate system
+ref_traj = [VehiclePose_Example(:,1:3), ref_station];
+S_range = [200 300];
+fig_num = fig_num + 20;
+fcn_ExtractCL_comparePCinENUandST(pointCloud_ST_filtered_cell, ref_traj, S_range, fig_num)
+%% Step 3:Extract center line using extrema and pattern matching
 disp('Step 3: Extracting center line based on intensity extrema and patterns...')
-% --> Core processing: extrema filtering + template matching
-s_width = 4; % meter
-N_width = 10;
-t_width = 6; % meter
-s_res = s_width/N_width;
-t_res = 0.01;
-min_pts = 500;
-fig_num = -1;
-Ref_Pose = [VehiclePose_Example, ref_station];
-pointCloud_ST_array = cell2mat(pointCloud_ST_cell);
-[XYZSTE_Center_Line_Array, HistoryData] = fcn_ExtractCL_extractCL_WhiteStrip(pointCloud_ST_array, s_width, s_res, t_res, min_pts, Ref_Pose, fig_num);
-%% Clean the extracted center line: sort the center line by stations and remove outliers
-disp('Step 4: Cleaning center line points ...')
-[XYZSTE_Center_Line_Array_clean, XYZSTE_Center_Line_Array_outliers] = fcn_ExtractCL_cleanCLPoints(XYZSTE_Center_Line_Array);
-%% Visualize the results
-% setenv('MATLABFLAG_PLOTROAD_ALIGNMATLABLLAPLOTTINGIMAGES_LAT','0.0000010');
+% Initialize parameters
+s_length = 5;
+N_s     = 10;
+s_res = s_length/N_s;
+t_res    = 0.01;
+min_pts  = 500;
+fig_num  = -1; % Set fig_num > 0 to show plots
+pointCloud_ST_array = cell2mat(pointCloud_ST_filtered_cell); %#ok<NASGU>
+[XYZST_lane_markers_array, HistoryData] = ... %#ok<NASGU>
+    fcn_ExtractCL_extractLaneMarkers(pointCloud_ST_array, s_length, s_res, t_res, min_pts, Seg, fig_num);
+%% 
+plotFormat.Color = [1 0 0];
+plotFormat.Marker = '.';
+plotFormat.MarkerSize = 10;
+plotFormat.LineStyle = '-';
+plotFormat.LineWidth = 3;
+fig_num = 30;
+fcn_ExtractCL_plotCenterLineXY(XYZST_lane_markers_array, pointCloud_ST_array, plotFormat, fig_num)
+%% Step 4: Separate left/right lane markers
+[LaneMarkers, islands, outliers] = fcn_ExtractCL_separateLaneMarkers(XYZST_lane_markers_array); %#ok<NASGU,ASGLU>
+%% Plot detected Lane markers in ENU coordinate system (Show point cloud)
+plotFormat.Color = [1 0 0];
+plotFormat.Marker = '.';
+plotFormat.MarkerSize = 10;
+plotFormat.LineStyle = '-';
+plotFormat.LineWidth = 3;
+fig_num = 40;
+LaneMarkersRightSide = LaneMarkers.LaneMarkerRight;
+fcn_ExtractCL_plotCenterLineXY(LaneMarkersRightSide, pointCloud_ST_array, plotFormat, fig_num)
+title('Extracted lane markers (ENU Coordinates)', 'FontSize', 22);
+%% Plot detected Lane markers in LLA coordinate system (Not show pointcloud)
 setenv('MATLABFLAG_PLOTROAD_ALIGNMATLABLLAPLOTTINGIMAGES_LAT','-0.0000015');
 setenv('MATLABFLAG_PLOTROAD_ALIGNMATLABLLAPLOTTINGIMAGES_LON','0.000005');
 
-disp('Step 4: Visualizing the extracted center line...')
+reference_latitude = 40.86368573;
+reference_longitude = -77.83592832;
+reference_altitude = 344.189;
+ref_baseStationLLA = [reference_latitude, reference_longitude, reference_altitude];
 plotFormat.Color = [1 0 0];
 plotFormat.Marker = '.';
 plotFormat.MarkerSize = 10;
 plotFormat.LineStyle = '-';
 plotFormat.LineWidth = 3;
-fig_num = 130;
-fcn_ExtractCL_plotCenterLineLL(XYZSTE_Center_Line_Array_clean,ref_baseStationLLA,plotFormat,fig_num)
-disp('Demo completed. Center line extraction successful!')
+fig_num = fig_num + 5;
+fcn_ExtractCL_plotCenterLineLL(LaneMarkersRightSide,ref_baseStationLLA,plotFormat,fig_num)
+title('Extracted lane marker (LLA Coordinates)', 'FontSize', 22);
+%% Step 5: Compute lane center line from markers depending on mode
+% mode = 'left', compute the road center line based on the left side lane markers 
+[RoadCenterLine, ~] = fcn_ExtractCL_computeCLwithLaneMarkers(LaneMarkers, 'left', HistoryData, t_res,Seg);
 
-%%
+%% Plot detected road center line in ENU coordinate system (Show point cloud)
 plotFormat.Color = [1 0 0];
 plotFormat.Marker = '.';
 plotFormat.MarkerSize = 10;
 plotFormat.LineStyle = '-';
 plotFormat.LineWidth = 3;
-fig_num = 140;
-close all
-fcn_ExtractCL_plotCenterLineXY(XYZSTE_Center_Line_Array_clean,pointCloud_ST_array,plotFormat,fig_num)
+fig_num = 50;
+fcn_ExtractCL_plotCenterLineXY(RoadCenterLine, pointCloud_ST_array, plotFormat, fig_num)
+title('Extracted road center line (ENU Coordinates)', 'FontSize', 22);
+%% Plot detected road center line in LLA coordinate system (Not show pointcloud)
+setenv('MATLABFLAG_PLOTROAD_ALIGNMATLABLLAPLOTTINGIMAGES_LAT','-0.0000015');
+setenv('MATLABFLAG_PLOTROAD_ALIGNMATLABLLAPLOTTINGIMAGES_LON','0.000005');
 
+reference_latitude = 40.86368573;
+reference_longitude = -77.83592832;
+reference_altitude = 344.189;
+ref_baseStationLLA = [reference_latitude, reference_longitude, reference_altitude];
+plotFormat.Color = [1 0 0];
+plotFormat.Marker = '.';
+plotFormat.MarkerSize = 10;
+plotFormat.LineStyle = '-';
+plotFormat.LineWidth = 3;
+fig_num = fig_num + 5;
+fcn_ExtractCL_plotCenterLineLL(RoadCenterLine,ref_baseStationLLA,plotFormat,fig_num)
+title('Extracted road center line (LLA Coordinates)', 'FontSize', 22);
+%% fcn_ExtractCL_extractCenterLine includes all procedures from Step 1 to Step 5. 
+% Users can directly run this section to obtain the final results.
+T_range = [-3, 3];
+RoadCenterLine = fcn_ExtractCL_extractCenterLine(PointCloud_ENU_Example, VehiclePose_Example, T_range);
+
+%% Plot detected road center line in ENU coordinate system (Show point cloud)
+plotFormat.Color = [1 0 0];
+plotFormat.Marker = '.';
+plotFormat.MarkerSize = 10;
+plotFormat.LineStyle = '-';
+plotFormat.LineWidth = 3;
+fig_num = 60;
+fcn_ExtractCL_plotCenterLineXY(RoadCenterLine, pointCloud_ST_array, plotFormat, fig_num)
+title('Extracted road center line (ENU Coordinates)', 'FontSize', 22);
+%% Plot detected road center line in LLA coordinate system (Not show pointcloud)
+setenv('MATLABFLAG_PLOTROAD_ALIGNMATLABLLAPLOTTINGIMAGES_LAT','-0.0000015');
+setenv('MATLABFLAG_PLOTROAD_ALIGNMATLABLLAPLOTTINGIMAGES_LON','0.000005');
+
+reference_latitude = 40.86368573;
+reference_longitude = -77.83592832;
+reference_altitude = 344.189;
+ref_baseStationLLA = [reference_latitude, reference_longitude, reference_altitude];
+plotFormat.Color = [1 0 0];
+plotFormat.Marker = '.';
+plotFormat.MarkerSize = 10;
+plotFormat.LineStyle = '-';
+plotFormat.LineWidth = 3;
+fig_num = fig_num + 5;
+fcn_ExtractCL_plotCenterLineLL(RoadCenterLine,ref_baseStationLLA,plotFormat,fig_num)
+title('Extracted road center line (LLA Coordinates)', 'FontSize', 22);
 %% Functions follow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   ______                _   _

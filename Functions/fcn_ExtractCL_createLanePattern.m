@@ -188,10 +188,11 @@ if flag_do_plot == 1
     figure(fig_num)
     clf
     plot(pattern_template, 'k-', 'LineWidth', 2);
-    title(sprintf('Lane Pattern Template: %s', lane_type), 'Interpreter', 'none');
+    % title(sprintf('Lane Pattern Template: %s', lane_type), 'Interpreter', 'none');
     xlabel('Index'); 
-    ylabel('Binary Pattern Template');
+    ylabel('Lane marker presence (0/1)');
     grid on;
+    grid minor;
 end
 
 if flag_do_debug

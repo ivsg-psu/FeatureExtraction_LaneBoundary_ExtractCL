@@ -33,7 +33,8 @@ LLA_center_line = enu2lla(XYZ_center_line, ref_base_station, "ellipsoid");
 LL_center_line = LLA_center_line(:, 1:2);
 
 % Plot center line
-figure(fig_num); clf;
+figure(fig_num); 
+clf;
 h_geoplot = fcn_plotRoad_plotLL(LL_center_line, plotFormat, fig_num);
 hold on;
 
@@ -41,7 +42,7 @@ hold on;
 geoscatter(ref_base_station(1), ref_base_station(2), 100, 'green', 'filled');
 
 % Add title and legend
-title('Extracted Lane Centerline (LLA Coordinates)', 'FontSize', 22);
-legend('Center line', 'Reference base station', 'FontSize', 18);
+% title('Extracted Lane Centerline (LLA Coordinates)', 'FontSize', 22);
+legend('Extracted line', 'Reference base station', 'FontSize', 18);
 
 end
