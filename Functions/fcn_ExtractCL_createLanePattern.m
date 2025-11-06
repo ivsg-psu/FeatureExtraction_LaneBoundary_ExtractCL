@@ -41,14 +41,16 @@ function pattern_template = fcn_ExtractCL_createLanePattern(lane_type, t_res, va
 %   pattern = fcn_ExtractCL_createLanePattern('single_strip', 0.01, 3.6, 0.1);
 %
 % Author:
-%   This function was written by Xinyu Cao on 2025_06_23.
-%   Contact: example@psu.edu
-
+% This function was written on 2025_06_03 by X. Cao
+% Questions or comments? xfc5113@psu.edu
+%
 % Revision history:
-% 2025_06_23 - Xinyu Cao
+
+% 2025_06_23 - xfc5113@psu.edu
 % -- Formatted according to fcn_Laps_breakDataIntoLaps template
 % -- Updated documentation, debug controls, and default parameter handling
-
+% 2025_11_05 - xfc5113@psu.edu
+% -- added new layout 'single_both_sides'
 
 
 
@@ -171,7 +173,15 @@ switch lane_type
         pattern_template(white_start_idx:white_end_idx) = 1;
         pattern_template(first_yellow_start_idx:first_yellow_end_idx) = 1;
         pattern_template(second_yellow_start_idx:second_yellow_end_idx) = 1;
-
+    case 'single_both_sides'
+        start_idx_1 = 2;
+        end_idx_1 = start_idx_1 + round(marker_width/t_res);
+        start_idx_2 = end_idx_1 + round((lane_width - marker_width)/t_res);
+        end_idx_2 = start_idx_2 + round(marker_width/t_res);
+        pattern_length = end_idx_2 + 1;
+        pattern_template = zeros(pattern_length, 1);
+        pattern_template(start_idx_1:end_idx_1) = 1;
+        pattern_template(start_idx_2:end_idx_2) = 1;
     case 'single_strip'
         start_idx = 2;
         end_idx = start_idx + round(marker_width/t_res);

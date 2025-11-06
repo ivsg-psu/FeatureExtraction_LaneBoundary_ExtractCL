@@ -110,6 +110,10 @@ end
 % - Classify into left/right inliers, islands, and outliers
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+if isempty(XYZST_lane_markers_array)
+    return
+end
+
 % Extract lateral coordinate T
 T = XYZST_lane_markers_array(:,5);
 

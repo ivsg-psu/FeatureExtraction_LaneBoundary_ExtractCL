@@ -4,6 +4,8 @@
 % Revision history
 %     2025-10-30 - xfc5113@psu.edu
 %     -- wrote the code originally
+%     2025_11_05 - xfc5113@psu.edu
+%     -- added corner-case validation
 
 %% TO DO:
 % -- add fail case and bad layout template
@@ -78,4 +80,38 @@ if fig_num > 0
     title('Extracted Lane Marker Points');
 end
 
+%% Corner Cases
+%% Corner Case 1
+disp('Corner Case 1: Empty point cloud input...');
+try
+    [XYZST_LaneMarkers_Array, HistoryData] = ...
+        fcn_ExtractCL_extractLaneMarkers([], 0.5, 0.25, 0.05, 10, Seg, -1);
+    assert(isempty(XYZST_LaneMarkers_Array), 'Expected empty output for empty input.');
+    fprintf('  Passed: empty input handled gracefully.\n');
+catch ME
+    fprintf('  Failed: %s\n', ME.message);
+end
+%% Corner Case 2
+disp('Corner Case 2: Too few points...');
+small_pc = rand(5,10);  % only 5 points
+small_pc(:,9) = linspace(0,1,5);
+small_pc(:,10) = linspace(-0.5,0.5,5);
+try
+    [XYZST_LaneMarkers_Array, HistoryData] = ...
+        fcn_ExtractCL_extractLaneMarkers(small_pc, 0.5, 0.25, 0.05, 10, Seg, -1);
+    assert(isempty(XYZST_LaneMarkers_Array), 'Expected no detections for sparse input.');
+    fprintf('  Passed: sparse input handled.\n');
+catch ME
+    fprintf('  Failed: %s\n', ME.message);
+end
 
+%% Corner Case 3
+disp('Corner Case 3: Invalid input layout...');
+bad_pc = rand(100,8);
+try
+    fcn_ExtractCL_extractLaneMarkers(bad_pc, 0.5, 0.25, 0.05, 10, Seg, -1);
+    error('Expected error for invalid input layout not thrown.');
+catch ME
+    assert(contains(ME.identifier,'BadInput'), 'Unexpected error identifier.');
+    fprintf('  Passed: invalid input layout rejected correctly.\n');
+end

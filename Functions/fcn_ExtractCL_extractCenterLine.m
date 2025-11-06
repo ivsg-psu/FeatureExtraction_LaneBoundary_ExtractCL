@@ -1,4 +1,4 @@
-function RoadCenterLine = fcn_ExtractCL_extractCenterLine(PointCloud_ENU_Example, VehiclePose_ENU_Example, T_range, varargin)
+function RoadCenterLine = fcn_ExtractCL_extractCenterLine(PointCloud_ENU, VehiclePose_ENU, T_range, varargin)
 % fcn_ExtractCL_extractCenterLine
 % -------------------------------------------------------------------------
 % Purpose:
@@ -10,12 +10,12 @@ function RoadCenterLine = fcn_ExtractCL_extractCenterLine(PointCloud_ENU_Example
 % FORMAT:
 %
 %   LaneCenterLine = fcn_ExtractCL_extractCenterLine(...
-%        PointCloud_ENU_Example, VehiclePose_ENU_Example, T_range, ...
+%        PointCloud_ENU, VehiclePose_ENU, T_range, ...
 %        (s_length), (N_s), (t_res), (min_pts), (mode), (fig_num));
 %
 % INPUTS (required):
-%   PointCloud_ENU_Example : Nx3 or Nx4 numeric, ENU points [E N U (I)].
-%   VehiclePose_ENU_Example: Mx6 numeric, vehicle poses [X Y Z Roll Pitch Yaw].
+%   PointCloud_ENU : Nx3 or Nx4 numeric, ENU points [E N U (I)].
+%   VehiclePose_ENU: Mx6 numeric, vehicle poses [X Y Z Roll Pitch Yaw].
 %   T_range                : 1x2 numeric, lateral filter range [Tmin Tmax] in ST.
 %
 % OPTIONAL INPUTS (via varargin, in order):
@@ -81,11 +81,11 @@ if flag_check_input
     if nargin < 3
         error('Incorrect number of input arguments. Expected at least 3.');
     end
-    if isempty(PointCloud_ENU_Example)
-        error('PointCloud_ENU_Example is empty');
+    if isempty(PointCloud_ENU)
+        error('PointCloud_ENU is empty');
     end
-    if isempty(VehiclePose_ENU_Example) || size(VehiclePose_ENU_Example,2) < 6
-        error('VehiclePose_ENU_Example must be Mx6 numeric [X Y Z Roll Pitch Yaw].');
+    if isempty(VehiclePose_ENU) || size(VehiclePose_ENU,2) < 6
+        error('VehiclePose_ENU must be Mx6 numeric [X Y Z Roll Pitch Yaw].');
     end
     if ~isvector(T_range) || numel(T_range) ~= 2
         error('T_range must be a 1x2 vector [Tmin Tmax].');
@@ -146,7 +146,7 @@ end
 
 % Step 1: ENU → ST projection
 [pointCloud_ST_cell, ref_station, Seg] = ...
-    fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_Example, VehiclePose_ENU_Example, fig_num); %#ok<ASGLU>
+    fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU, VehiclePose_ENU, fig_num); %#ok<ASGLU>
 
 % Step 2: Lateral (T) filtering in ST
 pointCloud_ST_filtered_cell = fcn_ExtractCL_filterPCinT(pointCloud_ST_cell, T_range);

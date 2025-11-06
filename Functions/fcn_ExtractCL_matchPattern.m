@@ -32,13 +32,29 @@ function [best_fit_pattern, best_fit_idx, best_fit_error, meanSquaredError_Combi
 %   MSE: Kx1 vector
 %       Per-start MSE for all valid starts (K = N-M+1). If CandidateIdx is
 %       used, disallowed starts are set to +Inf.
+%
+%
+% This function was written on 2025_06_03 by X. Cao
+% Questions or comments? xfc5113@psu.edu
+%
+% Revision history:
+%      2025_06_03 - xfc5113@psu.edu
+%     -- wrote the code originally
 
-%% Debugging and Input checks
 
-% Check if flag_max_speed set. This occurs if the fig_num variable input
-% argument (varargin) is given a number of -1, which is not a valid figure
-% number.
-%% Debugging and Input checks (kept as in your style)
+%% check input arguments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____                   _
+%  |_   _|                 | |
+%    | |  _ __  _ __  _   _| |_ ___
+%    | | | '_ \| '_ \| | | | __/ __|
+%   _| |_| | | | |_) | |_| | |_\__ \
+%  |_____|_| |_| .__/ \__,_|\__|___/
+%              | |
+%              |_|
+% See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Ensure input is column
 flag_max_speed = 0;
 if (nargin>=3 && isequal(varargin{end},-1))
     flag_do_debug = 0;  %#ok<NASGU>
@@ -65,19 +81,7 @@ else
     debug_fig_num = []; %#ok<NASGU>
 end
 
-%% check input arguments
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   _____                   _
-%  |_   _|                 | |
-%    | |  _ __  _ __  _   _| |_ ___
-%    | | | '_ \| '_ \| | | | __/ __|
-%   _| |_| | | | |_) | |_| | |_\__ \
-%  |_____|_| |_| .__/ \__,_|\__|___/
-%              | |
-%              |_|
-% See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Ensure input is column
+
 if isrow(intensity_data)
     intensity_data = intensity_data';
 end
@@ -156,7 +160,7 @@ MSEWin = corr_score / PatternLength;
 weight_MSE  = 0.1;         
 meanSquaredError_Combined = weight_MSE*MSE + (1-weight_MSE)*zNCC_error;
 [best_fit_error, min_idx] = min(MSE);
-best_fit_idx = min_idx;  % keep your indexing convention
+best_fit_idx = min_idx + 1;  % use the index at the top
 
 % Reconstruct aligned pattern
 best_fit_pattern = zeros(DataLength,1);

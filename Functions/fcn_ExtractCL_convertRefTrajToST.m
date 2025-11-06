@@ -1,5 +1,5 @@
-function Seg = fcn_ExtractCL_buildSegmentsFromRefPose(Ref_Pose, varargin)
-% fcn_ExtractCL_buildSegmentsFromRefPose
+function ST_struct = fcn_ExtractCL_convertRefTrajToST(Ref_Pose, varargin)
+% fcn_ExtractCL_convertRefTrajToST
 % Builds segment-wise geometry from a reference trajectory for reuse.
 % Each adjacent pair of reference points forms a segment with associated
 % station, tangent, and left-normal vectors. This struct is used for
@@ -7,7 +7,7 @@ function Seg = fcn_ExtractCL_buildSegmentsFromRefPose(Ref_Pose, varargin)
 %
 % FORMAT:
 %
-%      Seg = fcn_ExtractCL_buildSegmentsFromRefPose(...
+%      ST_struct = fcn_ExtractCL_convertRefTrajToST(...
 %                  Ref_Pose,...
 %                  (flag_do_debug));
 %
@@ -27,7 +27,7 @@ function Seg = fcn_ExtractCL_buildSegmentsFromRefPose(Ref_Pose, varargin)
 %
 % OUTPUTS:
 %
-%      Seg: struct containing segment-level geometry
+%      ST_struct: struct containing segment-level geometry
 %          .traj_XY           (M x 2)  original XY points
 %          .ref_station       (M x 1)  cumulative station
 %          .traj_start        (K x 2)  segment start points
@@ -48,7 +48,7 @@ function Seg = fcn_ExtractCL_buildSegmentsFromRefPose(Ref_Pose, varargin)
 %
 % EXAMPLES:
 %
-%      See script: script_test_fcn_ExtractCL_buildSegmentsFromRefPose
+%      See script: script_test_fcn_ExtractCL_convertRefTrajToST
 %
 % This function was written on 2025_08_15 by X. Cao
 % Questions or comments? xfc5113@psu.edu
@@ -58,6 +58,11 @@ function Seg = fcn_ExtractCL_buildSegmentsFromRefPose(Ref_Pose, varargin)
 %      2025_10_28 - xfc5113@psu.edu
 %      -- reformatted comments and structure per repository template
 %      -- added input validation and debug flag handling
+%      
+%      2025_11_15 - xfc5113@psu.edu
+%      -- renamed the function from fcn_ExtractCL_buildSegmentsFromRefPose 
+%           to fcn_ExtractCL_convertRefTrajToST
+%      -- renamed the output namd from Seg to ST_struct
 %
 % TO DO
 %      - Add option to compute normals using smoothed heading yaw
@@ -87,10 +92,10 @@ end
 % See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 assert(isnumeric(Ref_Pose) && size(Ref_Pose,2) >= 2, ...
-    'fcn_ExtractCL_buildSegmentsFromRefPose:BadInput',...
+    'fcn_ExtractCL_convertRefTrajToST:BadInput',...
     'Ref_Pose must be a numeric Mx2+ array.');
 assert(size(Ref_Pose,1) >= 2, ...
-    'fcn_ExtractCL_buildSegmentsFromRefPose:TooFewSamples',...
+    'fcn_ExtractCL_convertRefTrajToST:TooFewSamples',...
     'Ref_Pose must contain at least 2 points.');
 
 %% Main code starts here
@@ -153,7 +158,7 @@ catch
 end
 
 %% Pack results
-Seg = struct( ...
+ST_struct = struct( ...
     'traj_XY',          traj_XY, ...
     'ref_station',      ref_station, ...
     'traj_start',       traj_start, ...

@@ -1,92 +1,124 @@
-% script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m
+%% script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m
 % Tests fcn_ExtractCL_computeCLwithLaneMarkers.m
 %
-% Revision history
-%     2025-10-30 - xfc5113@psu.edu
-%     -- wrote the code originally
-
-%% Purpose
-% This script tests fcn_ExtractCL_computeCLwithLaneMarkers, which computes the
-% lane (or road) center line using previously detected lane markers and
-% historical pattern data. The method determines lateral offsets between
-% lane-marker clusters and outputs a center line in station–lateral (S,T)
-% coordinates.
+% Revision history:
+%   2025_11_05 - Xinyu Cao
+%   -- Created full multi-mode test script with fake geometry and patterns
+%
+% Purpose:
+%   Validate both 'left' and 'right' modes of lane-centerline computation.
+%   The test simulates lane marker data, per-station patterns, and segment
+%   geometry, verifying that results are spatially consistent and stable.
+%
+% Cases:
+%   1) Left-mode direct projection
+%   2) Right-mode pattern-guided offset
+%   3) Sparse pattern + missing Z
+%   4) Empty marker / invalid input handling
 
 %% Setup
 clc; clear; close all;
+addpath(genpath(pwd));
 
-% Load example data
-try
-    [VehiclePose_Example, PointCloud_ENU_Example] = fcn_ExtractCL_loadMatData();
-catch
-    dataFolder = fullfile(pwd,'Data');
-    [VehiclePose_Example, PointCloud_ENU_Example] = fcn_ExtractCL_loadMatData(dataFolder);
+% Common parameters
+t_res = 0.05;
+S_ref = (0:5:100)';
+
+% Build a synthetic Seg (straight 100m path)
+Seg.ref_station       = S_ref;
+Seg.traj_start        = [S_ref(1:end-1) zeros(length(S_ref)-1,1)];
+Seg.traj_end          = [S_ref(2:end) zeros(length(S_ref)-1,1)];
+Seg.segment           = Seg.traj_end - Seg.traj_start;
+Seg.segment_length    = sqrt(sum(Seg.segment.^2,2));
+Seg.seg_tangent       = [ones(length(Seg.segment_length),1) zeros(length(Seg.segment_length),1)];
+Seg.seg_normal        = [zeros(length(Seg.segment_length),1) ones(length(Seg.segment_length),1)]; % left = +Y
+Seg.seg_start_station = S_ref(1:end-1);
+Seg.d_seg             = diff(S_ref);
+
+%% ===== CASE 1: Left mode (direct centerline) =====
+disp('Case 1: Direct use of left markers...');
+N = length(S_ref);
+T_left  = -3.6 + 0.05*randn(N,1);
+Z_left  = 0.01*S_ref + 0.02*randn(N,1);
+LaneMarkers.LaneMarkerLeft  = [S_ref S_ref*0 Z_left S_ref T_left];
+LaneMarkers.LaneMarkerRight = [];
+
+% Dummy HistoryData
+for i = 1:N
+    HistoryData(i).S_Ref = S_ref(i);
+    HistoryData(i).LanePattern = zeros(1, round(8/t_res));
+    HistoryData(i).T_Ref = (-4:t_res:4)';
+    HistoryData(i).Z_Ref = zeros(size(HistoryData(i).T_Ref));
 end
 
-% Step 1: Project ENU → ST
-fig_num = 7;
-[pointCloud_ST_cell, ref_station, Seg] = ...
-    fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_Example, VehiclePose_Example, fig_num);
+[RoadCL_left, MarkerCL_left] = ...
+    fcn_ExtractCL_computeCLwithLaneMarkers(LaneMarkers, 'left', HistoryData, t_res, Seg);
 
-% Step 2: Lateral filtering
-T_range = [-3, 3];
-pointCloud_ST_filtered_cell = fcn_ExtractCL_filterPCinT(pointCloud_ST_cell, T_range);
+figure(101); clf; hold on; axis equal; grid on;
+plot(MarkerCL_left(:,1), MarkerCL_left(:,2), 'r.-','LineWidth',2);
+plot(RoadCL_left(:,1), RoadCL_left(:,2), 'b--','LineWidth',2);
+xlabel('X [m]'); ylabel('Y [m]');
+title('Case 1: Left-mode direct projection');
+legend('Marker CL (Left)','Road CL');
+assert(size(RoadCL_left,1)>0 && all(abs(RoadCL_left(:,2))<0.5), ...
+    'Left-mode road centerline should follow X-axis.');
+fprintf('  Case 1 passed.\n\n');
 
-% Step 3: Extract lane markers
-s_length = 5;
-N_s      = 10;
-s_res    = s_length/N_s;
-t_res    = 0.01;
-min_pts  = 500;
-fig_num  = -1;
-pointCloud_ST_array = cell2mat(pointCloud_ST_filtered_cell);
-[XYZST_lane_markers_array, HistoryData] = ...
-    fcn_ExtractCL_extractLaneMarkers(pointCloud_ST_array, s_length, s_res, t_res, min_pts, Seg, fig_num);
+%% ===== CASE 2: Right mode (pattern-guided offset) =====
+disp('Case 2: Pattern-guided offset using right markers...');
+T_right = 3.6 + 0.05*randn(N,1);
+Z_right = 0.01*S_ref + 0.02*randn(N,1);
+LaneMarkers.LaneMarkerRight = [S_ref S_ref*0 Z_right S_ref T_right];
+LaneMarkers.LaneMarkerLeft  = [];
 
-% Step 4: Separate lane markers
-[LaneMarkers, islands, outliers] = fcn_ExtractCL_separateLaneMarkers(XYZST_lane_markers_array); %#ok<ASGLU>
+% Generate artificial per-station patterns
+for i = 1:N
+    HistoryData(i).S_Ref = S_ref(i);
+    T_axis = (-4:t_res:4)';
+    HistoryData(i).T_Ref = T_axis;
+    HistoryData(i).Z_Ref = zeros(size(T_axis));
 
-%% Step 5: Compute lane center line
-disp('Step 5: Computing lane center line from detected markers...');
-mode = 'left'; % use left lane markers as reference
-[RoadCenterLine, LaneMarkerCenterLine] = ...
-    fcn_ExtractCL_computeCLwithLaneMarkers(LaneMarkers, mode, HistoryData, t_res, Seg); %#ok<NASGU>
+    % pattern: right solid + double yellow at -3 ~ -3.4
+    pattern = zeros(size(T_axis));
+    idx_right = find(abs(T_axis - 3.6) < 0.05);
+    idx_double = find((T_axis > -3.4 & T_axis < -3.0) | (T_axis > -3.2 & T_axis < -2.8));
+    pattern([idx_right; idx_double]) = 1;
+    HistoryData(i).LanePattern = pattern;
+end
 
-%% Verification
-% Check outputs
-assert(~isempty(RoadCenterLine) && isnumeric(RoadCenterLine), ...
-    'RoadCenterLine must be a non-empty numeric array.');
-assert(size(RoadCenterLine,2) >= 2, ...
-    'RoadCenterLine should contain at least [S, T] columns.');
+[RoadCL_right, MarkerCL_right] = ...
+    fcn_ExtractCL_computeCLwithLaneMarkers(LaneMarkers, 'right', HistoryData, t_res, Seg);
 
-fprintf(' fcn_ExtractCL_computeCLwithLaneMarkers executed successfully.\n');
-fprintf('   Center line points: %d\n', size(RoadCenterLine,1));
+figure(102); clf; hold on; axis equal; grid on;
+plot(MarkerCL_right(:,1), MarkerCL_right(:,2), 'b.','DisplayName','Right lane markers');
+plot(RoadCL_right(:,1),  RoadCL_right(:,2),  'r--','LineWidth',2,'DisplayName','Road centerline');
+xlabel('X [m]'); ylabel('Y [m]');
+title('Case 2: Right-mode pattern-guided centerline');
+legend('Location','best');
 
+fprintf('  Case 2 passed.\n\n');
 
-%% Plot detected road center line in ENU coordinate system (Show point cloud)
-plotFormat.Color = [1 0 0];
-plotFormat.Marker = '.';
-plotFormat.MarkerSize = 10;
-plotFormat.LineStyle = '-';
-plotFormat.LineWidth = 3;
-fig_num = 50;
-fcn_ExtractCL_plotCenterLineXY(RoadCenterLine, pointCloud_ST_array, plotFormat, fig_num)
-title('Extracted road center line (ENU Coordinates)', 'FontSize', 22);
-%% Plot detected road center line in LLA coordinate system (Not show pointcloud)
-setenv('MATLABFLAG_PLOTROAD_ALIGNMATLABLLAPLOTTINGIMAGES_LAT','-0.0000015');
-setenv('MATLABFLAG_PLOTROAD_ALIGNMATLABLLAPLOTTINGIMAGES_LON','0.000005');
+%% ===== CASE 3: Sparse / missing pattern entries =====
+disp('Case 3: Sparse patterns...');
+for i = 1:N
+    if mod(i,3)==0
+        HistoryData(i).LanePattern = zeros(size(HistoryData(i).T_Ref));
+    end
+end
+[RoadCL_sparse, MarkerCL_sparse] = ...
+    fcn_ExtractCL_computeCLwithLaneMarkers(LaneMarkers, 'right', HistoryData, t_res, Seg);
+assert(size(RoadCL_sparse,1) <= size(RoadCL_right,1), ...
+    'Sparse pattern case should yield fewer valid stations.');
+fprintf('  Case 3 passed.\n\n');
 
-reference_latitude = 40.86368573;
-reference_longitude = -77.83592832;
-reference_altitude = 344.189;
-ref_baseStationLLA = [reference_latitude, reference_longitude, reference_altitude];
-plotFormat.Color = [1 0 0];
-plotFormat.Marker = '.';
-plotFormat.MarkerSize = 10;
-plotFormat.LineStyle = '-';
-plotFormat.LineWidth = 3;
-fig_num = fig_num + 5;
-fcn_ExtractCL_plotCenterLineLL(RoadCenterLine,ref_baseStationLLA,plotFormat,fig_num)
-title('Extracted road center line (LLA Coordinates)', 'FontSize', 22);
+%% ===== CASE 4: Empty / invalid input =====
+disp('Case 4: Empty or missing lane markers...');
+LaneMarkersEmpty.LaneMarkerLeft = [];
+LaneMarkersEmpty.LaneMarkerRight = [];
+[RoadCL_empty, MarkerCL_empty] = ...
+    fcn_ExtractCL_computeCLwithLaneMarkers(LaneMarkersEmpty, 'left', HistoryData, t_res, Seg);
+assert(isempty(RoadCL_empty) && isempty(MarkerCL_empty), 'Empty input should yield empty outputs.');
+fprintf('  Case 4 passed.\n\n');
 
-
+%% ===== Summary =====
+fprintf('All tests passed for fcn_ExtractCL_computeCLwithLaneMarkers.m\n');

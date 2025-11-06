@@ -4,6 +4,8 @@
 % Revision history
 %     2025-10-30 - xfc5113@psu.edu
 %     -- wrote the code originally
+%     2025_11_05 - xfc5113@psu.edu
+%     -- added corner-case validation
 
 %% Purpose
 % This script tests fcn_ExtractCL_filterPCinT, which filters the LiDAR point
@@ -77,3 +79,34 @@ if ~isempty(pointCloud_ST_filtered_cell)
     ylabel('T [m]');
     title('Filtered LiDAR points in ST frame');
 end
+
+%% Additional synthetic and corner-case tests
+disp('Running additional validation tests (synthetic and corner cases)...');
+
+% Synthetic dataset
+N = 100;
+T_vals = linspace(-5,5,N)';
+template = [(1:N)' zeros(N,8) T_vals];
+synthetic_cell = {template; template+1; template+2};
+T_range_synth = [-1 1];
+filtered = fcn_ExtractCL_filterPCinT(synthetic_cell, T_range_synth);
+assert(all(cellfun(@(A) all(A(:,10)>=-1 & A(:,10)<=1), filtered(~cellfun('isempty',filtered)))), ...
+    'Synthetic filtering failed.');
+fprintf('  Synthetic test passed.\n');
+
+% Corner case: empty + NaN + reversed range
+frame1 = [];
+frame2 = [(1:5)' zeros(5,8) [NaN; -2; 0; 2; 10]];
+frame3 = [(1:5)' zeros(5,8) linspace(-4,4,5)'];
+test_cell = {frame1; frame2; frame3};
+T_range_rev = [3 -3];
+filtered = fcn_ExtractCL_filterPCinT(test_cell, T_range_rev);
+T_nonempty = filtered(~cellfun('isempty',filtered));
+if ~isempty(T_nonempty)
+    T_combined = vertcat(T_nonempty{:});
+    T_combined = T_combined(:,10);
+    assert(all(T_combined>=-3 & T_combined<=3), 'Reversed range filtering failed.');
+end
+fprintf('  Corner-case test passed.\n');
+
+fprintf('\nAll tests for fcn_ExtractCL_filterPCinT executed successfully.\n');

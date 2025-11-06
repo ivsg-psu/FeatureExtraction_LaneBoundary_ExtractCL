@@ -84,7 +84,6 @@ function [XYZST_LaneMarkers_Array, HistoryData] = fcn_ExtractCL_extractLaneMarke
 %
 % DEPENDENCIES:
 %
-%      fcn_ExtractCL_buildSegmentsFromRefPose
 %      fcn_ExtractCL_createLanePattern
 %      fcn_ExtractCL_organizePointCloudST
 %      fcn_ExtractCL_findLaneMarkersByPattern
@@ -120,7 +119,6 @@ flag_check_inputs = 1;
 if nargin >= 7 && isequal(varargin{end}, -1)
     flag_max_speed    = 1;
     flag_do_debug     = 0;
-    flag_check_inputs = 0;
 else
     % Environment overrides (optional)
     MATLABFLAG_EXTRACTCL_FLAG_CHECK_INPUTS = getenv("MATLABFLAG_EXTRACTCL_FLAG_CHECK_INPUTS");
@@ -176,6 +174,8 @@ if flag_check_inputs
     if ~(isnumeric(pointcloud_array) && ismatrix(pointcloud_array) && size(pointcloud_array,2) >= 10)
         error('fcn_ExtractCL_extractLaneMarkers:BadInput',...
               'pointcloud_array must be numeric Nx10+ with columns [X Y Z I ... s t].');
+        return
+
     end
     assert(isscalar(s_width) && s_width > 0,   's_width must be a positive scalar (meters).');
     assert(isscalar(s_res)   && s_res   > 0,   's_res must be a positive scalar (meters).');
@@ -193,6 +193,15 @@ end
 %  |_|  |_|\__,_|_|_| |_|
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Return if the input is empty
+
+if isempty(pointcloud_array)
+    XYZST_LaneMarkers_Array = [];
+    return
+
+end
+
 
 % --- Extract commonly used columns from the input array -------------------
 % These are the only columns we need downstream. Keeping explicit indexing

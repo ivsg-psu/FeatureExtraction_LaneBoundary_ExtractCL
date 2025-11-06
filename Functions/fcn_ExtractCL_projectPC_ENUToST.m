@@ -1,4 +1,4 @@
-function [pointCloud_ST_cell, ref_station, Seg] = fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_cell, Ref_Pose, varargin)
+function [pointCloud_ST_cell, ref_station, ST_struct] = fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_cell, Ref_Pose, varargin)
 % fcn_ExtractCL_projectPC_ENUToST
 % Projects ENU LiDAR point clouds into the curvilinear (s, t) frame with
 % respect to a given reference trajectory. Each LiDAR point is associated
@@ -43,7 +43,8 @@ function [pointCloud_ST_cell, ref_station, Seg] = fcn_ExtractCL_projectPC_ENUToS
 %
 % DEPENDENCIES:
 %
-%      fcn_ExtractCL_buildSegmentsFromRefPose    % segment cache builder
+%      fcn_ExtractCL_convertRefTrajToST     % convert ref trajectory to ST
+%      coordinate
 %      Statistics and Machine Learning Toolbox   % knnsearch / KDTree
 %
 % EXAMPLES:
@@ -60,7 +61,9 @@ function [pointCloud_ST_cell, ref_station, Seg] = fcn_ExtractCL_projectPC_ENUToS
 %      2025_10_28 - xfc5113@psu.edu
 %      -- aligned headings/comments to project template
 %      -- added strict input checks and debug/plot gating
-%
+%      2025_11_05 - xfc5113@psu.edu
+%      -- renamed fcn_ExtractCL_buildSegmentsFromRefPose to 
+%         fcn_ExtractCL_convertRefTrajToST
 % TO DO
 %      - Add optional robust fallbacks if knnsearch is unavailable
 
@@ -148,17 +151,17 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Build/reference segment cache from the reference pose
-Seg = fcn_ExtractCL_buildSegmentsFromRefPose(Ref_Pose, varargin{:});
-ref_station          = Seg.ref_station;
-traj_start           = Seg.traj_start;
-traj_end             = Seg.traj_end;
-segment_length       = Seg.segment_length;
-seg_tangent          = Seg.seg_tangent;
-seg_normal           = Seg.seg_normal;
-seg_start_station    = Seg.seg_start_station;
-d_seg                = Seg.d_seg;
-seg_tree             = Seg.seg_tree;
+% Build/reference ST structure from the reference pose
+ST_struct = fcn_ExtractCL_convertRefTrajToST(Ref_Pose, varargin{:});
+ref_station          = ST_struct.ref_station;
+traj_start           = ST_struct.traj_start;
+traj_end             = ST_struct.traj_end;
+segment_length       = ST_struct.segment_length;
+seg_tangent          = ST_struct.seg_tangent;
+seg_normal           = ST_struct.seg_normal;
+seg_start_station    = ST_struct.seg_start_station;
+d_seg                = ST_struct.d_seg;
+seg_tree             = ST_struct.seg_tree;
 
 % Quick guard for empty/degenerate path
 if isempty(ref_station) || ref_station(end) <= 0

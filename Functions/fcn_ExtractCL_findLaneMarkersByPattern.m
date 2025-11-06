@@ -49,6 +49,12 @@ function [lane_marker_mask, pattern_cell, extrema_filter_cell, best_pattern_temp
 %   best_fit_errors: column vector
 %       Sum squared error of best fit per strip
 %
+%   DEPENDENCIES:
+%      fcn_ExtractCL_matchPattern
+%
+% EXAMPLES:
+%
+%      See script: script_test_fcn_ExtractCL_findLaneMarkersByPattern
 % This function was written on 2025_06_03 by X. Cao
 % Questions or comments? xfc5113@psu.edu
 %
@@ -61,7 +67,6 @@ function [lane_marker_mask, pattern_cell, extrema_filter_cell, best_pattern_temp
 %      2025_10_28 - xfc5113@psu.edu
 %      -- remove flip pattern matching feature
 %      -- edited comments and headings
-
 %
 % TO DO
 %      - Complete the history guiding feature
@@ -261,10 +266,15 @@ for ith_strip = 1:N_strips
     end
 
     % detrend & normalize correlation
-    baseline             = movmedian(extrema_corr, 5*filter_lengthI,'Endpoints','shrink');
+    % baseline             = movmedian(extrema_corr, 5*filter_lengthI,'Endpoints','shrink');
+    % w = 5*filter_lengthI;
+    % medLoc = movmedian(extrema_corr, w, 'Endpoints','shrink');
+    % madLoc = 1.4826*movmedian(abs(extrema_corr - medLoc), w, 'Endpoints','shrink');
+    % clipped = min(extrema_corr, medLoc + 1.5*madLoc);          
+    baseline = mean(extrema_corr);
     extrema_corr_detrended = max(0, extrema_corr - baseline);
     corr_min             = min(extrema_corr_detrended);
-    corr_max             = max(extrema_corr);
+    corr_max             = max(extrema_corr_detrended);
     range                = corr_max - corr_min;
     if range <= eps
         extrema_corr_norm = zeros(size(extrema_corr_detrended));
@@ -410,7 +420,7 @@ for ith_strip = 1:N_strips
 
     % --- Optional final overlay plot for this strip ---
     if flag_do_plot
-        figure(fig_num);
+        figure(fig_num + 5);
         clf; hold on;
         plot(t_profile(:, ith_strip), extrema_corr_norm, 'Color',[0.0 0.45 0.75],'LineWidth',3);
         plot(t_profile(:, ith_strip), best_pattern,      'Color',[0.0 0.6 0],   'LineWidth',3);
