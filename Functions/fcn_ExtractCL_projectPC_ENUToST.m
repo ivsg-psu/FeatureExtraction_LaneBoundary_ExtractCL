@@ -1,4 +1,4 @@
-function [pointCloud_ST_cell, ref_station, ST_struct] = fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_cell, Ref_Pose, varargin)
+function [pointCloud_ST_cell, ref_station, ST_struct] = fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_cell, Ref_Traj, varargin)
 % fcn_ExtractCL_projectPC_ENUToST
 % Projects ENU LiDAR point clouds into the curvilinear (s, t) frame with
 % respect to a given reference trajectory. Each LiDAR point is associated
@@ -19,7 +19,7 @@ function [pointCloud_ST_cell, ref_station, ST_struct] = fcn_ExtractCL_projectPC_
 %          Each cell contains a LiDAR scan in ENU coordinates, formatted as:
 %          [X Y Z Intensity (TimeOffset) (Ring) ...]. Only XYZI are required.
 %
-%      Ref_Pose: MxK numeric array (K >= 3 recommended)
+%      Ref_Traj: MxK numeric array (K >= 3 recommended)
 %          Reference trajectory with rows like [X Y Z Roll Pitch Yaw].
 %          Only [X, Y, Z, Yaw] are needed by downstream helpers.
 %
@@ -112,11 +112,11 @@ if flag_check_inputs
         error('fcn_ExtractCL_projectPC_ENUToST:BadPointCloudCell',...
               'PointCloud_ENU_cell must be a non-empty cell array of frames.');
     end
-    if ~(isnumeric(Ref_Pose) && ismatrix(Ref_Pose) && ~isempty(Ref_Pose))
+    if ~(isnumeric(Ref_Traj) && ismatrix(Ref_Traj) && ~isempty(Ref_Traj))
         error('fcn_ExtractCL_projectPC_ENUToST:BadRefPose',...
               'Ref_Pose must be a non-empty numeric 2-D array (MxK).');
     end
-    if size(Ref_Pose,2) < 4
+    if size(Ref_Traj,2) < 4
         error('fcn_ExtractCL_projectPC_ENUToST:RefPoseTooFewCols',...
               'Ref_Pose must have at least 4 columns (X Y Z Yaw ...).');
     end
@@ -152,7 +152,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Build/reference ST structure from the reference pose
-ST_struct = fcn_ExtractCL_convertRefTrajToST(Ref_Pose, varargin{:});
+ST_struct = fcn_ExtractCL_convertRefTrajToST(Ref_Traj, varargin{:});
 ref_station          = ST_struct.ref_station;
 traj_start           = ST_struct.traj_start;
 traj_end             = ST_struct.traj_end;

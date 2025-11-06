@@ -20,7 +20,8 @@
 % -- Added dependencies for LaneDetection
 % 2025_10_30 - Xinyu Cao
 % -- Added a function that packages Steps 1–5 to directly output the final results.
-
+% 2025_11_06 - Xinyu Cao
+% -- Updated library to latest releases
 % TO DO:
 
 %% Prepare the workspace
@@ -30,19 +31,16 @@ close all
 clear library_name library_folders library_url
 
 ith_library = 1;
-library_name{ith_library}    = 'DebugTools_v2024_12_16';
+library_name{ith_library}    = 'DebugTools_v2025_11_06';
 library_folders{ith_library} = {'Functions','Data'};
-library_url{ith_library}     = 'https://github.com/ivsg-psu/Errata_Tutorials_DebugTools/archive/refs/tags/DebugTools_v2024_12_16.zip';
+library_url{ith_library}     = 'https://github.com/ivsg-psu/Errata_Tutorials_DebugTools/archive/refs/tags/DebugTools_v2025_11_06.zip';
+
 
 ith_library = ith_library+1;
-library_name{ith_library}    = 'PathClass_v2024_03_14';
+library_name{ith_library}    = 'PathClass_v2025_08_03';
 library_folders{ith_library} = {'Functions'};
-library_url{ith_library}     = 'https://github.com/ivsg-psu/PathPlanning_PathTools_PathClassLibrary/archive/refs/tags/PathClass_v2024_03_14.zip';
+library_url{ith_library}     = 'https://github.com/ivsg-psu/PathPlanning_PathTools_PathClassLibrary/archive/refs/tags/PathClass_v2025_08_03.zip';
 
-ith_library = ith_library+1;
-library_name{ith_library}    = 'GPSClass_v2023_06_29';
-library_folders{ith_library} = {'Functions'};
-library_url{ith_library}     = 'https://github.com/ivsg-psu/FieldDataCollection_GPSRelatedCodes_GPSClass/archive/refs/tags/GPSClass_v2023_06_29.zip';
 
 ith_library = ith_library+1;
 library_name{ith_library}    = 'LineFitting_v2023_07_24';
@@ -55,24 +53,19 @@ library_folders{ith_library} = {'Functions'};
 library_url{ith_library}     = 'https://github.com/ivsg-psu/PathPlanning_GeomTools_FindCircleRadius/archive/refs/tags/FindCircleRadius_v2023_08_02.zip';
 
 ith_library = ith_library+1;
-library_name{ith_library}    = 'BreakDataIntoLaps_v2023_08_25';
+library_name{ith_library}    = 'BreakDataIntoLaps_v2025_07_05';
 library_folders{ith_library} = {'Functions'};                                
-library_url{ith_library}     = 'https://github.com/ivsg-psu/FeatureExtraction_DataClean_BreakDataIntoLaps/archive/refs/tags/BreakDataIntoLaps_v2023_08_25.zip';
+library_url{ith_library}     = 'https://github.com/ivsg-psu/FeatureExtraction_DataClean_BreakDataIntoLaps/archive/refs/tags/BreakDataIntoLaps_v2025_07_05.zip';
 
 ith_library = ith_library+1;
-library_name{ith_library}    = 'PlotRoad_v2024_11_07';
-library_folders{ith_library} = {'Functions', 'Data'};
-library_url{ith_library}     = 'https://github.com/ivsg-psu/FieldDataCollection_VisualizingFieldData_PlotRoad/archive/refs/tags/PlotRoad_v2024_11_07.zip'; 
-
-ith_library = ith_library+1;
-library_name{ith_library}    = 'GeometryClass_v2024_08_28';
+library_name{ith_library}    = 'GeometryClass_v2025_10_20';
 library_folders{ith_library} = {'Functions'};
-library_url{ith_library}     = 'https://github.com/ivsg-psu/PathPlanning_GeomTools_GeomClassLibrary/archive/refs/tags/GeometryClass_v2024_08_28.zip';
+library_url{ith_library}     = 'https://github.com/ivsg-psu/PathPlanning_GeomTools_GeomClassLibrary/archive/refs/tags/GeometryClass_v2025_10_20.zip';
 
 ith_library = ith_library+1;
-library_name{ith_library}    = 'PlotRoad_v2025_04_12';
+library_name{ith_library}    = 'PlotRoad_v2025_07_16';
 library_folders{ith_library} = {'Functions'};
-library_url{ith_library}     = 'https://github.com/ivsg-psu/FieldDataCollection_VisualizingFieldData_PlotRoad/archive/refs/tags/PlotRoad_v2025_04_12.zip';
+library_url{ith_library}     = 'https://github.com/ivsg-psu/FieldDataCollection_VisualizingFieldData_PlotRoad/archive/refs/tags/PlotRoad_v2025_07_16.zip';
 
 %% Clear paths and folders, if needed
 clear flag_Laps_Folders_Initialized
@@ -143,7 +136,7 @@ T_range = [-3, 3];
 pointCloud_ST_filtered_cell = fcn_ExtractCL_filterPCinT(pointCloud_ST_cell, T_range);
 %% Compare pointcloud in ENU and ST coordinate system
 ref_traj = [VehiclePose_Example(:,1:3), ref_station];
-S_range = [200 300];
+S_range = [200 250];
 fig_num = fig_num + 20;
 fcn_ExtractCL_comparePCinENUandST(pointCloud_ST_filtered_cell, ref_traj, S_range, fig_num)
 %% Step 3:Extract center line using extrema and pattern matching

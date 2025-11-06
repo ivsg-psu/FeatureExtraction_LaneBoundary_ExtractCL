@@ -1,0 +1,924 @@
+<strong> </strong><strong>Testing script: 1 of 15, script_test_fcn_ExtractCL_comparePCinENUandST
+
+</strong>Running script_test_fcn_ExtractCL_comparePCinENUandST
+.STARTING function: fcn_ExtractCL_convertRefTrajToST, in file: fcn_ExtractCL_convertRefTrajToST.m
+ENDING function: fcn_ExtractCL_convertRefTrajToST, in file: fcn_ExtractCL_convertRefTrajToST.m
+.Step 3: Comparing point cloud representations in ENU and ST coordinate systems...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_comparePCinENUandST/Step3_ComparePointcloudsInENUVsST and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'VehiclePose_Example'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_comparePCinENUandST', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_comparePCinENUandST.m', 39)" style="font-weight:bold">script_test_fcn_ExtractCL_comparePCinENUandST</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_comparePCinENUandST.m',39,0)">line 39</a>)
+    ref_traj = [VehiclePose_Example(:,1:3), ref_station];
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_comparePCinENUandST/Verification and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'fig_num'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_comparePCinENUandST', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_comparePCinENUandST.m', 48)" style="font-weight:bold">script_test_fcn_ExtractCL_comparePCinENUandST</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_comparePCinENUandST.m',48,0)">line 48</a>)
+    assert(ishandle(fig_num) && strcmp(get(fig_num,'Type'),'figure'), 'Expected figure not created.');
+================================================================================
+.
+Done script_test_fcn_ExtractCL_comparePCinENUandST
+__________
+
+Failure Summary:
+
+     Name                                                                             Failed  Incomplete  Reason(s)
+    ================================================================================================================
+     script_test_fcn_ExtractCL_comparePCinENUandST/Step3_ComparePointcloudsInENUVsST    X         X       Errored.
+    ----------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_comparePCinENUandST/Verification                         X         X       Errored.
+<strong> </strong><strong>Testing script: 2 of 15, script_test_fcn_ExtractCL_computeCLwithLaneMarkers
+
+</strong>Running script_test_fcn_ExtractCL_computeCLwithLaneMarkers
+..Case 1: Direct use of left markers...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_computeCLwithLaneMarkers/test_____CASE1_LeftMode_directCenterline______ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'S_ref'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_computeCLwithLaneMarkers', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m', 40)" style="font-weight:bold">script_test_fcn_ExtractCL_computeCLwithLaneMarkers</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m',40,0)">line 40</a>)
+    N = length(S_ref);
+================================================================================
+.Case 2: Pattern-guided offset using right markers...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_computeCLwithLaneMarkers/test_____CASE2_RightMode_pattern_guidedOffset______ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'N'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_computeCLwithLaneMarkers', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m', 69)" style="font-weight:bold">script_test_fcn_ExtractCL_computeCLwithLaneMarkers</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m',69,0)">line 69</a>)
+    T_right = 3.6 + 0.05*randn(N,1);
+================================================================================
+.Case 3: Sparse patterns...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_computeCLwithLaneMarkers/test_____CASE3_Sparse_MissingPatternEntries_____ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'N'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_computeCLwithLaneMarkers', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m', 103)" style="font-weight:bold">script_test_fcn_ExtractCL_computeCLwithLaneMarkers</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m',103,0)">line 103</a>)
+    for i = 1:N
+================================================================================
+.Case 4: Empty or missing lane markers...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_computeCLwithLaneMarkers/test_____CASE4_Empty_InvalidInput_____ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'HistoryData'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_computeCLwithLaneMarkers', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m', 119)" style="font-weight:bold">script_test_fcn_ExtractCL_computeCLwithLaneMarkers</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_computeCLwithLaneMarkers.m',119,0)">line 119</a>)
+        fcn_ExtractCL_computeCLwithLaneMarkers(LaneMarkersEmpty, 'left', HistoryData, t_res, Seg);
+================================================================================
+.All tests passed for fcn_ExtractCL_computeCLwithLaneMarkers.m
+.
+Done script_test_fcn_ExtractCL_computeCLwithLaneMarkers
+__________
+
+Failure Summary:
+
+     Name                                                                                                    Failed  Incomplete  Reason(s)
+    =======================================================================================================================================
+     script_test_fcn_ExtractCL_computeCLwithLaneMarkers/test_____CASE1_LeftMode_directCenterline______         X         X       Errored.
+    ---------------------------------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_computeCLwithLaneMarkers/test_____CASE2_RightMode_pattern_guidedOffset______    X         X       Errored.
+    ---------------------------------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_computeCLwithLaneMarkers/test_____CASE3_Sparse_MissingPatternEntries_____       X         X       Errored.
+    ---------------------------------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_computeCLwithLaneMarkers/test_____CASE4_Empty_InvalidInput_____                 X         X       Errored.
+<strong> </strong><strong>Testing script: 3 of 15, script_test_fcn_ExtractCL_convertRefTrajToST
+
+</strong>Running script_test_fcn_ExtractCL_convertRefTrajToST
+..Case 1: Testing with real VehiclePose_Example.mat data...
+  Case 1 passed: Real data conversion successful. 11580 segments generated.
+.Case 2: Testing with straight-line synthetic trajectory...
+  Case 2 passed: Straight-line trajectory test successful.
+.Case 3: Testing with circular trajectory...
+  Case 3 passed: Circular trajectory test successful.
+.Case 4: Testing degenerate inputs...
+  Subcase (a) passed: single-point input correctly rejected.
+  Subcase (b): identical-points case handled with message: Arrays have incompatible sizes for this operation.
+
+All test cases for fcn_ExtractCL_convertRefTrajToST executed successfully.
+.
+Done script_test_fcn_ExtractCL_convertRefTrajToST
+__________
+
+<strong> </strong><strong>Testing script: 4 of 15, script_test_fcn_ExtractCL_createLanePattern
+
+</strong>Running script_test_fcn_ExtractCL_createLanePattern
+.Running script_test_fcn_ExtractCL_createLanePattern.m ...
+.Test 1: left_double_yellow_right_white
+  Test 1 passed: pattern length = 389 samples, segments = 3.
+.Test 2: single_strip
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_createLanePattern/Test2_BasicSingle_stripPattern and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_createLanePattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m', 43)" style="font-weight:bold">script_test_fcn_ExtractCL_createLanePattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m',43,0)">line 43</a>)
+    pattern_template = fcn_ExtractCL_createLanePattern(lane_type, t_res, [], [], [], fig_num);
+================================================================================
+.Test 3: single_strip
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_createLanePattern/Test3_BasicSingleOnBothSidesPattern and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_createLanePattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m', 55)" style="font-weight:bold">script_test_fcn_ExtractCL_createLanePattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m',55,0)">line 55</a>)
+    pattern_template = fcn_ExtractCL_createLanePattern(lane_type, t_res, [], [], [], fig_num);
+================================================================================
+.Test 4: Fast mode (-1 input)
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_createLanePattern/Test4_FastMode__1Input_ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_createLanePattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m', 66)" style="font-weight:bold">script_test_fcn_ExtractCL_createLanePattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m',66,0)">line 66</a>)
+    pattern_template = fcn_ExtractCL_createLanePattern('left_double_yellow_right_white', t_res, [],
+    [], [], -1);
+================================================================================
+.Test 5: Custom parameters
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_createLanePattern/Test5_CustomParameters and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_createLanePattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m', 78)" style="font-weight:bold">script_test_fcn_ExtractCL_createLanePattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m',78,0)">line 78</a>)
+        t_res, lane_width, marker_width, double_gap, fig_num);
+================================================================================
+.Test 6: Invalid lane type
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_createLanePattern/Test6_InvalidLaneType and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    ''
+    --------------
+    Error Details:
+    --------------
+    Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('assert')" style="font-weight:bold">assert</a>
+    Unexpected error message for invalid lane type.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_createLanePattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m', 92)" style="font-weight:bold">script_test_fcn_ExtractCL_createLanePattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m',92,0)">line 92</a>)
+        assert(contains(ME.message, 'Unsupported lane_type'), ...
+================================================================================
+.Test 7: No plotting when fig_num omitted
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_createLanePattern/Test7_NoPlottingIfFig_numOmitted and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_createLanePattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m', 99)" style="font-weight:bold">script_test_fcn_ExtractCL_createLanePattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_createLanePattern.m',99,0)">line 99</a>)
+    pattern_template_noplot = fcn_ExtractCL_createLanePattern('single_strip', t_res);
+================================================================================
+.Test 8: Corner case - invalid t_res
+Subcase (a) passed: zero t_res rejected.
+  Subcase (b) passed: negative t_res rejected.
+. 
+All tests passed for fcn_ExtractCL_createLanePattern.m
+.
+Done script_test_fcn_ExtractCL_createLanePattern
+__________
+
+Failure Summary:
+
+     Name                                                                             Failed  Incomplete  Reason(s)
+    ================================================================================================================
+     script_test_fcn_ExtractCL_createLanePattern/Test2_BasicSingle_stripPattern         X         X       Errored.
+    ----------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_createLanePattern/Test3_BasicSingleOnBothSidesPattern    X         X       Errored.
+    ----------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_createLanePattern/Test4_FastMode__1Input_                X         X       Errored.
+    ----------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_createLanePattern/Test5_CustomParameters                 X         X       Errored.
+    ----------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_createLanePattern/Test6_InvalidLaneType                  X         X       Errored.
+    ----------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_createLanePattern/Test7_NoPlottingIfFig_numOmitted       X         X       Errored.
+<strong> </strong><strong>Testing script: 5 of 15, script_test_fcn_ExtractCL_extractLaneMarkers
+
+</strong>Running script_test_fcn_ExtractCL_extractLaneMarkers
+..STARTING function: fcn_ExtractCL_convertRefTrajToST, in file: fcn_ExtractCL_convertRefTrajToST.m
+ENDING function: fcn_ExtractCL_convertRefTrajToST, in file: fcn_ExtractCL_convertRefTrajToST.m
+.Step 3: Extracting center line based on intensity extrema and patterns...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_extractLaneMarkers/Step3_ExtractLaneMarkers and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'pointCloud_ST_filtered_cell'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_extractLaneMarkers', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_extractLaneMarkers.m', 54)" style="font-weight:bold">script_test_fcn_ExtractCL_extractLaneMarkers</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_extractLaneMarkers.m',54,0)">line 54</a>)
+    pointCloud_ST_array = cell2mat(pointCloud_ST_filtered_cell); %#ok<NASGU>
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_extractLaneMarkers/Verification and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'XYZST_lane_markers_array'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_extractLaneMarkers', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_extractLaneMarkers.m', 62)" style="font-weight:bold">script_test_fcn_ExtractCL_extractLaneMarkers</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_extractLaneMarkers.m',62,0)">line 62</a>)
+    assert(~isempty(XYZST_lane_markers_array) && isnumeric(XYZST_lane_markers_array), ...
+================================================================================
+..Corner Case 1: Empty point cloud input...
+  Failed: Unrecognized function or variable 'Seg'.
+.Corner Case 2: Too few points...
+  Failed: Unrecognized function or variable 'Seg'.
+.Corner Case 3: Invalid input layout...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_extractLaneMarkers/CornerCase3 and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    ''
+    --------------
+    Error Details:
+    --------------
+    Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('assert')" style="font-weight:bold">assert</a>
+    Unexpected error identifier.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_extractLaneMarkers', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_extractLaneMarkers.m', 115)" style="font-weight:bold">script_test_fcn_ExtractCL_extractLaneMarkers</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_extractLaneMarkers.m',115,0)">line 115</a>)
+        assert(contains(ME.identifier,'BadInput'), 'Unexpected error identifier.');
+================================================================================
+.
+Done script_test_fcn_ExtractCL_extractLaneMarkers
+__________
+
+Failure Summary:
+
+     Name                                                                   Failed  Incomplete  Reason(s)
+    ======================================================================================================
+     script_test_fcn_ExtractCL_extractLaneMarkers/Step3_ExtractLaneMarkers    X         X       Errored.
+    ------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_extractLaneMarkers/Verification                X         X       Errored.
+    ------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_extractLaneMarkers/CornerCase3                 X         X       Errored.
+<strong> </strong><strong>Testing script: 6 of 15, script_test_fcn_ExtractCL_filterPCinT
+
+</strong>Running script_test_fcn_ExtractCL_filterPCinT
+.STARTING function: fcn_ExtractCL_convertRefTrajToST, in file: fcn_ExtractCL_convertRefTrajToST.m
+ENDING function: fcn_ExtractCL_convertRefTrajToST, in file: fcn_ExtractCL_convertRefTrajToST.m
+.Step 2: Filtering the processing region in the lateral direction to reduce the amount of data to be processed....
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_filterPCinT/Step2_LateralFiltering and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'pointCloud_ST_cell'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_filterPCinT', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPCinT.m', 42)" style="font-weight:bold">script_test_fcn_ExtractCL_filterPCinT</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPCinT.m',42,0)">line 42</a>)
+    pointCloud_ST_filtered_cell = fcn_ExtractCL_filterPCinT(pointCloud_ST_cell, T_range);
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_filterPCinT/Verification and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'pointCloud_ST_filtered_cell'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_filterPCinT', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPCinT.m', 46)" style="font-weight:bold">script_test_fcn_ExtractCL_filterPCinT</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPCinT.m',46,0)">line 46</a>)
+    assert(iscell(pointCloud_ST_filtered_cell), 'Output must be a cell array.');
+================================================================================
+.Running additional validation tests (synthetic and corner cases)...
+  Synthetic test passed.
+  Corner-case test passed.
+
+All tests for fcn_ExtractCL_filterPCinT executed successfully.
+.
+Done script_test_fcn_ExtractCL_filterPCinT
+__________
+
+Failure Summary:
+
+     Name                                                          Failed  Incomplete  Reason(s)
+    =============================================================================================
+     script_test_fcn_ExtractCL_filterPCinT/Step2_LateralFiltering    X         X       Errored.
+    ---------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_filterPCinT/Verification              X         X       Errored.
+<strong> </strong><strong>Testing script: 7 of 15, script_test_fcn_ExtractCL_filterPointCloudInROI
+
+</strong>Running script_test_fcn_ExtractCL_filterPointCloudInROI
+...
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_filterPointCloudInROI/Test1_CartesianROI and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'LiDAR_Data_struct'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_filterPointCloudInROI', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m', 33)" style="font-weight:bold">script_test_fcn_ExtractCL_filterPointCloudInROI</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m',33,0)">line 33</a>)
+    filtered_struct = fcn_ExtractCL_filterPointCloudInROI(LiDAR_Data_struct, ROI);
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_filterPointCloudInROI/Test2_PolarROI and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'LiDAR_PointCloud_Cell'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_filterPointCloudInROI', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m', 52)" style="font-weight:bold">script_test_fcn_ExtractCL_filterPointCloudInROI</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m',52,0)">line 52</a>)
+    filtered_polar = fcn_ExtractCL_filterPointCloudInROI(LiDAR_PointCloud_Cell, ROI);
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_filterPointCloudInROI/Test3_FastMode_fig_num__1_ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'LiDAR_Data_struct'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_filterPointCloudInROI', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m', 62)" style="font-weight:bold">script_test_fcn_ExtractCL_filterPointCloudInROI</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m',62,0)">line 62</a>)
+    filtered_fast = fcn_ExtractCL_filterPointCloudInROI(LiDAR_Data_struct, ROI, fig_num);
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_filterPointCloudInROI/Test4_NoZLimit and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'LiDAR_PointCloud_Cell'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_filterPointCloudInROI', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m', 67)" style="font-weight:bold">script_test_fcn_ExtractCL_filterPointCloudInROI</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m',67,0)">line 67</a>)
+    filtered_nz = fcn_ExtractCL_filterPointCloudInROI(LiDAR_PointCloud_Cell, ROI);
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_filterPointCloudInROI/Test5_InvalidMode and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:assertion:failed'
+    --------------
+    Error Details:
+    --------------
+    Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('assert')" style="font-weight:bold">assert</a>
+    Assertion failed.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_filterPointCloudInROI', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m', 78)" style="font-weight:bold">script_test_fcn_ExtractCL_filterPointCloudInROI</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_filterPointCloudInROI.m',78,0)">line 78</a>)
+        assert(contains(ME.message,'Unsupported ROI.mode'));
+================================================================================
+.All tests passed for fcn_ExtractCL_filterPointCloudInROI.m
+.
+Done script_test_fcn_ExtractCL_filterPointCloudInROI
+__________
+
+Failure Summary:
+
+     Name                                                                        Failed  Incomplete  Reason(s)
+    ===========================================================================================================
+     script_test_fcn_ExtractCL_filterPointCloudInROI/Test1_CartesianROI            X         X       Errored.
+    -----------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_filterPointCloudInROI/Test2_PolarROI                X         X       Errored.
+    -----------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_filterPointCloudInROI/Test3_FastMode_fig_num__1_    X         X       Errored.
+    -----------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_filterPointCloudInROI/Test4_NoZLimit                X         X       Errored.
+    -----------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_filterPointCloudInROI/Test5_InvalidMode             X         X       Errored.
+<strong> </strong><strong>Testing script: 8 of 15, script_test_fcn_ExtractCL_findLaneMarkersByPattern
+
+</strong>Running script_test_fcn_ExtractCL_findLaneMarkersByPattern
+..Case 1: White + Double Yellow...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE1_White_DoubleYellow_____ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_findLaneMarkersByPattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m', 31)" style="font-weight:bold">script_test_fcn_ExtractCL_findLaneMarkersByPattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m',31,0)">line 31</a>)
+    pt = fcn_ExtractCL_createLanePattern(lane_type, t_res);
+================================================================================
+.Case 2: Single Both Sides...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE2_SingleBothSides_____ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_findLaneMarkersByPattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m', 66)" style="font-weight:bold">script_test_fcn_ExtractCL_findLaneMarkersByPattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m',66,0)">line 66</a>)
+    pt_both = fcn_ExtractCL_createLanePattern(lane_type, t_res);
+================================================================================
+.Case 3: Two lanes with different layout...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE3_FindLeft_double_yellow_right_whiteInMixedLayouts and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_findLaneMarkersByPattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m', 101)" style="font-weight:bold">script_test_fcn_ExtractCL_findLaneMarkersByPattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m',101,0)">line 101</a>)
+    pt_mix = fcn_ExtractCL_createLanePattern('left_double_yellow_right_white', t_res);
+================================================================================
+.Case 4: Find two single lane markers in mixed layouts...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE4_FindTwoSingleLaneMarkersInMixedLayouts_____ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_findLaneMarkersByPattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m', 144)" style="font-weight:bold">script_test_fcn_ExtractCL_findLaneMarkersByPattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m',144,0)">line 144</a>)
+    pt_mix = fcn_ExtractCL_createLanePattern('single_both_sides', t_res);
+================================================================================
+.Case 5: Corner and robustness checks...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE5_Corner_Robustness_____ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    ''
+    --------------
+    Error Details:
+    --------------
+    Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('assert')" style="font-weight:bold">assert</a>
+    Unexpected error for empty data.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_findLaneMarkersByPattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m', 190)" style="font-weight:bold">script_test_fcn_ExtractCL_findLaneMarkersByPattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_findLaneMarkersByPattern.m',190,0)">line 190</a>)
+        assert(contains(ME.message, 'non-empty numeric 2-D'), 'Unexpected error for empty data.');
+================================================================================
+.
+All tests passed for fcn_ExtractCL_findLaneMarkersByPattern.m
+.
+Done script_test_fcn_ExtractCL_findLaneMarkersByPattern
+__________
+
+Failure Summary:
+
+     Name                                                                                                                Failed  Incomplete  Reason(s)
+    ===================================================================================================================================================
+     script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE1_White_DoubleYellow_____                             X         X       Errored.
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE2_SingleBothSides_____                                X         X       Errored.
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE3_FindLeft_double_yellow_right_whiteInMixedLayouts    X         X       Errored.
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE4_FindTwoSingleLaneMarkersInMixedLayouts_____         X         X       Errored.
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_findLaneMarkersByPattern/test_____CASE5_Corner_Robustness_____                              X         X       Errored.
+<strong> </strong><strong>Testing script: 9 of 15, script_test_fcn_ExtractCL_loadMatData
+
+</strong>Running script_test_fcn_ExtractCL_loadMatData
+..
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_loadMatData/FunctionCall and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'dataFolder'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_loadMatData', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_loadMatData.m', 24)" style="font-weight:bold">script_test_fcn_ExtractCL_loadMatData</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_loadMatData.m',24,0)">line 24</a>)
+    [VehiclePose_Example, PointCloud_ENU_Example] = fcn_ExtractCL_loadMatData(dataFolder);
+================================================================================
+.Loaded variables:
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_loadMatData/Verification and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'VehiclePose_Example'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_loadMatData', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_loadMatData.m', 32)" style="font-weight:bold">script_test_fcn_ExtractCL_loadMatData</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_loadMatData.m',32,0)">line 32</a>)
+    assert(~isempty(VehiclePose_Example), 'VehiclePose_Example is empty!');
+================================================================================
+.
+Done script_test_fcn_ExtractCL_loadMatData
+__________
+
+Failure Summary:
+
+     Name                                                Failed  Incomplete  Reason(s)
+    ===================================================================================
+     script_test_fcn_ExtractCL_loadMatData/FunctionCall    X         X       Errored.
+    -----------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_loadMatData/Verification    X         X       Errored.
+<strong> </strong><strong>Testing script: 10 of 15, script_test_fcn_ExtractCL_matchPattern
+
+</strong>Running script_test_fcn_ExtractCL_matchPattern
+..Case 1: Matching left_double_yellow_right_white...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_matchPattern/test_____CASE1_White_DoubleYellow_____ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_matchPattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_matchPattern.m', 25)" style="font-weight:bold">script_test_fcn_ExtractCL_matchPattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_matchPattern.m',25,0)">line 25</a>)
+    pattern_template = fcn_ExtractCL_createLanePattern(lane_type, t_res);
+================================================================================
+.Case 2: Matching single_both_sides...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_matchPattern/test_____CASE2_SingleBothSides_____ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_matchPattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_matchPattern.m', 62)" style="font-weight:bold">script_test_fcn_ExtractCL_matchPattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_matchPattern.m',62,0)">line 62</a>)
+    pattern_template = fcn_ExtractCL_createLanePattern(lane_type, t_res);
+================================================================================
+.Case 3: Random noise robustness...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_matchPattern/test_____CASE3_RandomNoiseRobustness_____ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 't_res'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_matchPattern', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_matchPattern.m', 94)" style="font-weight:bold">script_test_fcn_ExtractCL_matchPattern</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_matchPattern.m',94,0)">line 94</a>)
+    pattern_template = fcn_ExtractCL_createLanePattern('single_strip', t_res);
+================================================================================
+.
+All tests passed for fcn_ExtractCL_matchPattern.m
+.
+Done script_test_fcn_ExtractCL_matchPattern
+__________
+
+Failure Summary:
+
+     Name                                                                              Failed  Incomplete  Reason(s)
+    =================================================================================================================
+     script_test_fcn_ExtractCL_matchPattern/test_____CASE1_White_DoubleYellow_____       X         X       Errored.
+    -----------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_matchPattern/test_____CASE2_SingleBothSides_____          X         X       Errored.
+    -----------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_matchPattern/test_____CASE3_RandomNoiseRobustness_____    X         X       Errored.
+<strong> </strong><strong>Testing script: 11 of 15, script_test_fcn_ExtractCL_organizePointCloudST
+
+</strong>Running script_test_fcn_ExtractCL_organizePointCloudST
+Running script_test_fcn_ExtractCL_organizePointCloudST.m ...
+.Case 1: Randomly distributed points in rectangular region
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_organizePointCloudST/Visualization_RawVsOrganized and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 's_bin'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_organizePointCloudST', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_organizePointCloudST.m', 57)" style="font-weight:bold">script_test_fcn_ExtractCL_organizePointCloudST</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_organizePointCloudST.m',57,0)">line 57</a>)
+    scatter(s_bin, t_bin, 4, intensity_bin, 'filled');
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_organizePointCloudST/Verification and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'I_interp'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_organizePointCloudST', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_organizePointCloudST.m', 84)" style="font-weight:bold">script_test_fcn_ExtractCL_organizePointCloudST</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_organizePointCloudST.m',84,0)">line 84</a>)
+    assert(~isempty(I_interp), 'Empty intensity grid output.');
+================================================================================
+.Case 2: Sparse region
+  Case 2 passed.
+.Case 3: Input with NaNs
+  Case 3 passed: NaN inputs handled correctly.
+.
+All tests for fcn_ExtractCL_organizePointCloudST executed successfully.
+Please verify that the organized grid visually matches raw region width.
+.
+Done script_test_fcn_ExtractCL_organizePointCloudST
+__________
+
+Failure Summary:
+
+     Name                                                                         Failed  Incomplete  Reason(s)
+    ============================================================================================================
+     script_test_fcn_ExtractCL_organizePointCloudST/Visualization_RawVsOrganized    X         X       Errored.
+    ------------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_organizePointCloudST/Verification                    X         X       Errored.
+<strong> </strong><strong>Testing script: 12 of 15, script_test_fcn_ExtractCL_plotCenterLineXY
+
+</strong>Running script_test_fcn_ExtractCL_plotCenterLineXY
+..
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_plotCenterLineXY/PrepareInputsToThePlotFunction and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'PointCloud_ENU_Example'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_plotCenterLineXY', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_plotCenterLineXY.m', 29)" style="font-weight:bold">script_test_fcn_ExtractCL_plotCenterLineXY</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_plotCenterLineXY.m',29,0)">line 29</a>)
+    N_frames = length(PointCloud_ENU_Example);
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_plotCenterLineXY/FunctionCall and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'VehiclePose_Example'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_plotCenterLineXY', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_plotCenterLineXY.m', 50)" style="font-weight:bold">script_test_fcn_ExtractCL_plotCenterLineXY</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_plotCenterLineXY.m',50,0)">line 50</a>)
+        VehiclePose_Example, ...
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_plotCenterLineXY/Verification and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'fig_num'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_plotCenterLineXY', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_plotCenterLineXY.m', 59)" style="font-weight:bold">script_test_fcn_ExtractCL_plotCenterLineXY</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_plotCenterLineXY.m',59,0)">line 59</a>)
+    assert(ishandle(fig_num) && strcmp(get(fig_num,'Type'),'figure'), 'Figure was not created.');
+================================================================================
+.
+Done script_test_fcn_ExtractCL_plotCenterLineXY
+__________
+
+Failure Summary:
+
+     Name                                                                       Failed  Incomplete  Reason(s)
+    ==========================================================================================================
+     script_test_fcn_ExtractCL_plotCenterLineXY/PrepareInputsToThePlotFunction    X         X       Errored.
+    ----------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_plotCenterLineXY/FunctionCall                      X         X       Errored.
+    ----------------------------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_plotCenterLineXY/Verification                      X         X       Errored.
+<strong> </strong><strong>Testing script: 13 of 15, script_test_fcn_ExtractCL_projectPC_ENUToST
+
+</strong>Running script_test_fcn_ExtractCL_projectPC_ENUToST
+..Step 1: Projecting LiDAR point cloud to station-lateral (S,T) frame...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_projectPC_ENUToST/FunctionCall and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'PointCloud_ENU_Example'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_projectPC_ENUToST', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_projectPC_ENUToST.m', 35)" style="font-weight:bold">script_test_fcn_ExtractCL_projectPC_ENUToST</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_projectPC_ENUToST.m',35,0)">line 35</a>)
+        fcn_ExtractCL_projectPC_ENUToST(PointCloud_ENU_Example, VehiclePose_Example, fig_num);
+================================================================================
+.
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_projectPC_ENUToST/Verification and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'pointCloud_ST_cell'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_projectPC_ENUToST', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_projectPC_ENUToST.m', 39)" style="font-weight:bold">script_test_fcn_ExtractCL_projectPC_ENUToST</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_projectPC_ENUToST.m',39,0)">line 39</a>)
+    assert(iscell(pointCloud_ST_cell) && ~isempty(pointCloud_ST_cell), ...
+================================================================================
+.
+Done script_test_fcn_ExtractCL_projectPC_ENUToST
+__________
+
+Failure Summary:
+
+     Name                                                      Failed  Incomplete  Reason(s)
+    =========================================================================================
+     script_test_fcn_ExtractCL_projectPC_ENUToST/FunctionCall    X         X       Errored.
+    -----------------------------------------------------------------------------------------
+     script_test_fcn_ExtractCL_projectPC_ENUToST/Verification    X         X       Errored.
+<strong> </strong><strong>Testing script: 14 of 15, script_test_fcn_ExtractCL_projectPC_STToENU
+
+</strong>Running script_test_fcn_ExtractCL_projectPC_STToENU
+..Case 1: Straight path, T offset test...
+  Case 1 passed.
+
+.Case 2: Quarter-circle path...
+  Case 2 passed.
+
+.Case 3: Out-of-range S values...
+
+================================================================================
+<strong>Error occurred in script_test_fcn_ExtractCL_projectPC_STToENU/test_____Case3_EdgeHandling_outsideSRange______ and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:UndefinedFunction'
+    --------------
+    Error Details:
+    --------------
+    Unrecognized function or variable 'Seg'.
+    
+    Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('script_test_fcn_ExtractCL_projectPC_STToENU', 'F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_projectPC_STToENU.m', 78)" style="font-weight:bold">script_test_fcn_ExtractCL_projectPC_STToENU</a> (<a href="matlab: opentoline('F:\GIT Files\FeatureExtraction_LaneBoundary_ExtractCL\Functions\script_test_fcn_ExtractCL_projectPC_STToENU.m',78,0)">line 78</a>)
+    XY_extrema = fcn_ExtractCL_projectPC_STToENU(S_extrema, T_extrema, Seg);
+================================================================================
+.All tests passed for fcn_ExtractCL_projectPC_STToENU.m
+.
+Done script_test_fcn_ExtractCL_projectPC_STToENU
+__________
+
+Failure Summary:
+
+     Name                                                                                         Failed  Incomplete  Reason(s)
+    ============================================================================================================================
+     script_test_fcn_ExtractCL_projectPC_STToENU/test_____Case3_EdgeHandling_outsideSRange______    X         X       Errored.
+<strong> </strong><strong>Testing script: 15 of 15, script_test_fcn_ExtractCL_separateLaneMarkers
+
+</strong>Running script_test_fcn_ExtractCL_separateLaneMarkers
+..Case 1: Straight symmetric lane markers...
+  Case 1 passed.
+
+.Case 2: Curved lane geometry...
+  Case 2 passed.
+
+.Case 3: Sparse + noisy data...
+  Case 3 passed.
+
+.Case 4: Single-side lane markers...
+  Case 4 passed.
+
+.Case 5: Empty / invalid input...
+.All tests passed for fcn_ExtractCL_separateLaneMarkers.m
+.
+Done script_test_fcn_ExtractCL_separateLaneMarkers
+__________
+

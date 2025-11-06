@@ -120,8 +120,9 @@ use_pre_defined_station = size(Ref_Pose,2) >= 7 ...
 if use_pre_defined_station
     ref_station = Ref_Pose(:,7);
 else
-    ds = [0; sqrt(sum(diff(traj_XY).^2, 2))];
-    ref_station = cumsum(ds);
+    % ds = [0; sqrt(sum(diff(traj_XY).^2, 2))];
+    % ref_station = cumsum(ds);
+    [ref_station, ~] = fcn_Path_calcPathStation(traj_XY);
 end
 
 % Compute raw segments
