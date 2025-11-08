@@ -13,7 +13,8 @@
 %
 % Contact: Xinyu Cao or Dr. Sean Brennan at sbrennan@psu.edu
 
-% Revision history:
+%% Revision history:
+
 % 2025_06_23 - Xinyu Cao
 % -- Created based on Laps demo structure
 % -- Replaced lap segmentation with LiDAR-based center line extraction demo
@@ -22,7 +23,8 @@
 % -- Added a function that packages Steps 1–5 to directly output the final results.
 % 2025_11_06 - Xinyu Cao
 % -- Updated library to latest releases
-% TO DO:
+
+%% TO DO:
 
 %% Prepare the workspace
 clear all
